@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: rgb(39,39,39);
+    background-color: rgb(251, 251, 248);
     color:white;
     font-family: 'Fira Sans', sans-serif;
 }
@@ -14,7 +14,7 @@ body {
 #renderer {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(236, 234, 234, 0.05);
     position: relative;
 }
 
@@ -32,7 +32,7 @@ body {
 }
 
 .bar.female {
-    background-color: rgb(255, 93, 93);
+    background-color: rgb(253, 155, 155);
 }
 
 .bar.male {
