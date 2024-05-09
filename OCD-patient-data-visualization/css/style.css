@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: rgb(251, 251, 248);
+    background-color: rgb(253, 253, 241);
     color:white;
     font-family: 'Fira Sans', sans-serif;
 }
@@ -19,11 +19,12 @@ body {
 }
 
 .dot {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: rgb(255, 255, 255);
+    width: 4px;
+    height: 4px;
     border-radius: 50%;
+    opacity: 20%;
+    border-style: 0.5px solid;
+    position: absolute;
 }
 
 .bar {
@@ -31,10 +32,29 @@ body {
     position: absolute;
 }
 
+.marital-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+/* .marital-dot.filled {
+    background-color: rgb(0, 0, 0);
+} */
+
+.marital-dot.bordered {
+    background-color: rgb(253, 253, 241);
+    /* border: 0.5px solid; */
+}
+
+
+
+/* 
 .bar.female {
     background-color: rgb(253, 155, 155);
 }
 
 .bar.male {
     background-color: rgb(85, 124, 255);
-}
+} */

@@ -10,11 +10,12 @@ function preparePatientData(ocdData) {
         const duration = patient["Duration of Symptoms (months)"];
         minDuration = Math.min(minDuration, duration);
         maxDuration = Math.max(maxDuration, duration);
-        patientData.push({ age: patient.Age, gender: patient.Gender, duration });
+        const maritalStatus = patient["Marital Status"];
+        patientData.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
         if (patient.Gender === "Female") {
-            femalePatients.push({ age: patient.Age, gender: patient.Gender, duration });
+            femalePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
         } else {
-            malePatients.push({ age: patient.Age, gender: patient.Gender, duration });
+            malePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
         }
     });
 
