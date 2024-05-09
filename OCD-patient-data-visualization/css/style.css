@@ -1,0 +1,40 @@
+* {
+
+    box-sizing: border-box; 
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: rgb(39,39,39);
+    color:white;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+#renderer {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+}
+
+.bar {
+    background-color: white;
+    position: absolute;
+}
+
+.bar.female {
+    background-color: rgb(255, 93, 93);
+}
+
+.bar.male {
+    background-color: rgb(85, 124, 255);
+}
