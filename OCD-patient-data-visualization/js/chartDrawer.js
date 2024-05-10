@@ -86,10 +86,10 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
     const dot = $('<div></div>');
     dot.addClass('dot');
     dot.css({
-        'background-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-        'left': x - 2, // Adjusted x position for the dot
-        'top': y + barHeight - 2, // Adjusted y position for the dot
-        'border': `0.5px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+        'background-color': `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`,
+        'border': `0.1px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+        'left': x - 2,
+        'top': y + barHeight - 2, 
     });
 
     renderer.append(dot);
@@ -102,19 +102,34 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         maritalDot.addClass('filled');
         maritalDot.css({
             'background-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-            'border-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`, // Add border color for married
+            'border-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
         });
     } else if (maritalStatus === "Single") {
         maritalDot.addClass('bordered');
+    } else if (maritalStatus === "Divorced") {
+        maritalDot.addClass('bordered divorced');
     }
+
     maritalDot.css({
         // 'background-color': 'transparent',
-        'left': x + Math.cos(radians) * barHeight - 2, // Adjusted x position for the dot
-        'top': y + barHeight + Math.sin(radians) * barHeight - 2, // Adjusted y position for the dot
+        'left': x + Math.cos(radians) * barHeight - 3, // Adjusted x position for the dot
+        'top': y + barHeight + Math.sin(radians) * barHeight - 3, // Adjusted y position for the dot
         'border': `0.5px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
     });
 
     renderer.append(maritalDot);
+
+    if (maritalStatus === "Divorced") {
+        const smallerDot = $('<div></div>');
+        smallerDot.addClass('marital-dot smaller filled');
+        smallerDot.css({
+            'background-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+            'left': x + Math.cos(radians) * barHeight - 1.5, // Adjusted x position for the smaller dot
+            'top': y + barHeight + Math.sin(radians) * barHeight - 1.5, // Adjusted y position for the smaller dot
+        });
+
+    renderer.append(smallerDot);
+    }
 
 }
 

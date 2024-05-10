@@ -22,10 +22,11 @@ body {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    opacity: 20%;
-    border-style: 0.5px solid;
+    /* opacity: 20%; */
+    /* border-style: 0.5px solid; */
     position: absolute;
 }
+
 
 .bar {
     background-color: white;
@@ -33,8 +34,8 @@ body {
 }
 
 .marital-dot {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     position: absolute;
 }
@@ -48,7 +49,22 @@ body {
     /* border: 0.5px solid; */
 }
 
+.marital-dot.smaller {
+    width: 3px;
+    height: 3px;
+}
 
+
+.button {
+    padding: 10px;
+    background-color: rgb(253, 253, 241);
+    border: 1px solid #4e4e4e;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #212121;
+    display: block;
+}
 
 /* 
 .bar.female {
