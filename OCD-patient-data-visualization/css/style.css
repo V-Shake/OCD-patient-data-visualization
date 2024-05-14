@@ -59,12 +59,13 @@ body {
     padding: 10px;
     background-color: rgb(253, 253, 241);
     border: 1px solid #4e4e4e;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-right: 20px;
+    margin-bottom: 20px;
     cursor: pointer;
     color: #212121;
     display: block;
 }
+
 
 /* 
 .bar.female {

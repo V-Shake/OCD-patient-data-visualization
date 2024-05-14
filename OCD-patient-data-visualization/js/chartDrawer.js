@@ -1,17 +1,24 @@
-function drawSunburstChart(stageWidth, stageHeight, renderer) {
-    const gap = 0.1; 
+function drawSunburstChart(stageWidth, stageHeight, renderer, filter) {
+    // const gap = 0.1; 
     const scaleFactor = 0.34; // Adjust this value to scale the bar heights
     const maximumAge = Math.max(...patientData.map(patient => patient.age));
-    const totalCount = patientData.length;
+    // const totalCount = patientData.length;
 
     // Calculate the total width of all bars including gaps
-    const totalGapWidth = gap * (totalCount - 1);
-    const barWidth = (stageWidth - totalGapWidth) / totalCount; // Reduced bar width
+    // const totalGapWidth = gap * (totalCount - 1);
+    // const barWidth = (stageWidth - totalGapWidth) / totalCount; // Reduced bar width
     // console.log(stageHeight);
 
-    // Calculate the total width of female and male bars
-    const femaleWidth = femalePatients.length * barWidth;
-    const maleWidth = malePatients.length * barWidth;
+    // const femaleWidth = femalePatients.length * barWidth;
+    // const maleWidth = malePatients.length * barWidth;
+
+    let filteredPatients = patientData;
+    if (filter) {
+        filteredPatients = patientData.filter(patient => patient.maritalStatus === filter);
+    }
+
+    const femalePatients = filteredPatients.filter(patient => patient.gender === "Female");
+    const malePatients = filteredPatients.filter(patient => patient.gender === "Male");
 
     // Calculate x offsets for female and male bars
     // const xOffset = (stageWidth - (femaleWidth + maleWidth)) / 2;
@@ -20,7 +27,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer) {
 
     // Calculate y offset
     // const yOffset = (stageHeight - (stageHeight / maximumAge) * scaleFactor) / 2 ;
-    let genderGap = 2;
+    let barsGap = 2;
 
     // Draw female bars
     for (let i = 0; i < femalePatients.length; i++) {
@@ -28,7 +35,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer) {
         const duration = femalePatients[i].duration;
         const maritalStatus = femalePatients[i].maritalStatus; 
         const barHeight = (stageHeight / maximumAge) * age * scaleFactor; // Apply the scale factor
-        const angle = 270 + genderGap + (360 * femalePatients.length / patientData.length - 2 * genderGap) / femalePatients.length * i; 
+        const angle = 270 + barsGap + (360 * femalePatients.length / patientData.length - 2 * barsGap) / femalePatients.length * i; 
         const radians = gmynd.radians(angle);
         const radius = 100; // Initial radius
         const x = stageWidth / 2 + Math.cos(radians) * radius; // Adjusted x position for female bars
@@ -42,7 +49,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer) {
         const duration = malePatients[i].duration;
         const maritalStatus = malePatients[i].maritalStatus; 
         const barHeight = (stageHeight / maximumAge) * age * scaleFactor; // Apply the scale factor
-        const angle = 270 + (360 * femalePatients.length / patientData.length) + genderGap + (360 * malePatients.length / patientData.length - 2 * genderGap) / malePatients.length * i;
+        const angle = 270 + (360 * femalePatients.length / patientData.length) + barsGap + (360 * malePatients.length / patientData.length - 2 * barsGap) / malePatients.length * i;
         const radians = gmynd.radians(angle);
         const radius = 100; // Initial radius
         const x = stageWidth / 2 + Math.cos(radians) * radius; // Adjusted x position for male bars
