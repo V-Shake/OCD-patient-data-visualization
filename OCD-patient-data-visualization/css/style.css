@@ -66,6 +66,23 @@ body {
     display: block;
 }
 
+/* Add this CSS for toggles */
+.toggle {
+    padding: 10px;
+    background-color: #4e4e4e;
+    border: 1px solid #4e4e4e;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: #fff;
+    display: inline-block;
+}
+
+.toggle.active {
+    background-color: #212121;
+}
+
+
 
 /* 
 .bar.female {

@@ -10,11 +10,24 @@
 </head>
 
 <body>
+    <div id="buttons" style="position: absolute; top: 220px; left: 50px;">
+        <div class="button active" id="genderButton">Gender</div>
+        <div class="button" id="obsessionButton">Obsession Type</div>
+        <div class="button" id="compulsionButton">Compulsion Type</div>
+    </div>
+
     <div id="renderer" class="m-5"></div>
-    <div id="buttons" style="position: absolute; top: 250px; right: 50px;">
-        <div class="button" id="marriedButton">Married</div>
-        <div class="button" id="singleButton">Single</div>
-        <div class="button" id="divorcedButton">Divorced</div>
+    <div id="buttons" style="position: absolute; top: 220px; right: 50px;">
+        
+        <div id="maritalStatusToggle" style="position: absolute; top: 220px; right: 50px;">
+            <div class="toggle married" id="marriedToggle">Married</div>
+            <div class="toggle single" id="singleToggle">Single</div>
+            <div class="toggle divorced" id="divorcedToggle">Divorced</div>
+        </div>
+
+        <div class="button" id="familyHistoryButton">+ Family History of OCD</div>
+        <div class="button" id="depressionButton">+ Depression Diagnosis</div>
+        <div class="button" id="anxietyButton">+ Anxiety Diagnosis</div>
     </div>
 
     <script src="data.js"></script>

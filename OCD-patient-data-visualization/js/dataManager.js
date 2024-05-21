@@ -11,11 +11,14 @@ function preparePatientData(ocdData) {
         minDuration = Math.min(minDuration, duration);
         maxDuration = Math.max(maxDuration, duration);
         const maritalStatus = patient["Marital Status"];
-        patientData.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
+        const familyHistory = patient["Family History of OCD"];
+        const depressionDiagnosis = patient["Depression Diagnosis"];
+        const anxietyDiagnosis = patient["Anxiety Diagnosis"];
+        patientData.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis }); 
         if (patient.Gender === "Female") {
-            femalePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
+            femalePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis }); 
         } else {
-            malePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus });
+            malePatients.push({ age: patient.Age, gender: patient.Gender, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis });
         }
     });
 
@@ -23,4 +26,3 @@ function preparePatientData(ocdData) {
     gmynd.sortData(femalePatients, 'duration');
     gmynd.sortData(malePatients, 'duration');
 }
-
