@@ -31,6 +31,7 @@ body {
 .bar {
     background-color: white;
     position: absolute;
+    cursor: pointer;
 }
 
 .marital-dot {
@@ -38,6 +39,8 @@ body {
     height: 6px;
     border-radius: 50%;
     position: absolute;
+    z-index: 1;
+    cursor: pointer;
 }
 
 /* .marital-dot.filled {
@@ -52,37 +55,96 @@ body {
 .marital-dot.smaller {
     width: 3px;
     height: 3px;
+    cursor: pointer;
 }
 
 
 .button {
-    padding: 10px;
+    padding: 8px;
+    border-radius: 5px;
     background-color: rgb(253, 253, 241);
     border: 1px solid #4e4e4e;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     cursor: pointer;
     color: #212121;
     display: block;
+    font-size: 14px;
 }
 
-/* Add this CSS for toggles */
+
 .toggle {
     padding: 10px;
-    background-color: #4e4e4e;
+    border-radius: 5px;
     border: 1px solid #4e4e4e;
     margin-right: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    gap: .5rem;
     cursor: pointer;
-    color: #fff;
     display: inline-block;
+    background-color: var(--toggle-background-color, #606060);
+    color: var(--toggle-text-color, #fff);
+    font-size: 14px;
 }
 
 .toggle.active {
-    background-color: #212121;
+    background-color: var(--toggle-active-background-color, #212121);
 }
 
+.toggle:hover {
+    opacity: var(--hover-opacity, 0.6); /* Adjust the opacity on hover */
+}
 
+.toggle:hover p {
+    transform: translateY(-3px);
+    transition: transform 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.dot.purple {
+    background-color: purple;
+}
+.line {
+    background-color: purple;
+    position: absolute;
+}
+
+.tab-list {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: .5rem;
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    left: 50px; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Center the tab list vertically */
+    z-index: 200000;
+}
+
+.tab {
+    padding: .5rem;
+    background-color: #4e4e4e; /* Change the background color */
+    outline: none;
+    min-width: 100px; /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+    border-radius: 3px;
+    color: white; /* Change the text color */
+}
+
+.tab:hover {
+    opacity: 0.6; /* Adjust the opacity on hover */
+}
+
+.tab:hover p {
+    transform: translateY(-3px);
+    transition: transform 0.2s cubic-bezier(0.85, 0, 0.15, 1);
+}
 
 /* 
 .bar.female {

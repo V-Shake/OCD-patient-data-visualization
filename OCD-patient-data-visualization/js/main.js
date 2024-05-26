@@ -1,3 +1,12 @@
+// ToDo: 
+// bisherige sunburst chart muss zu "Gender" tab zugeordnet werden.
+// sunburst Chart in 5 Teile aufteilen für anderen tabs.
+// filtered "married","single" und "divorced" muessen zu bar chart umwandeln.
+// "family History", "depression" und "anxiety" buttons
+// pop-ups: ausgewaehlte bar muss gekenntzeichnet werden
+// mousehover
+// animation
+
 let stage;
 let stageHeight;
 let stageWidth;
@@ -10,58 +19,38 @@ $(function () {
     preparePatientData(ocdData);
     drawSunburstChart(stageWidth, stageHeight, renderer);
 
+
     // Variables to store toggle states
     let marriedClicked = false;
     let singleClicked = false;
     let divorcedClicked = false;
 
-    // Event listeners for buttons
-    $('#genderButton').click(function () {
-        toggleActiveButton($(this));
-    });
-
-    $('#obsessionButton').click(function () {
-        toggleActiveButton($(this));
-    });
-
-    $('#compulsionButton').click(function () {
-        toggleActiveButton($(this));
-    });
 
     // Event listeners for toggle switches
     $('#marriedToggle').click(function () {
         marriedClicked = !marriedClicked; // Toggle the state
-        console.log("Married clicked:", marriedClicked); // Add this line
+        singleClicked = false;
+        divorcedClicked=false;
         toggleToggleButton($(this), "Married", marriedClicked);
     });
     
     $('#singleToggle').click(function () {
         singleClicked = !singleClicked; // Toggle the state
-        console.log("Single clicked:", singleClicked); // Add this line
+        marriedClicked = false;
+        divorcedClicked=false;
         toggleToggleButton($(this), "Single", singleClicked);
     });
     
     $('#divorcedToggle').click(function () {
         divorcedClicked = !divorcedClicked; // Toggle the state
-        console.log("Divorced clicked:", divorcedClicked); // Add this line
+        singleClicked = false;
+        marriedClicked=false;
         toggleToggleButton($(this), "Divorced", divorcedClicked);
     });
     
-    
 });
 
-function toggleActiveButton(button) {
-    $('.button').removeClass('active');
-    button.addClass('active');
-    // Call the appropriate function based on the active button
-    if (button.attr('id') === 'genderButton') {
-        // Call function to filter by gender
-    } else if (button.attr('id') === 'obsessionButton') {
-        // Call function to filter by obsession type
-    } else if (button.attr('id') === 'compulsionButton') {
-        // Call function to filter by compulsion type
-    }
-}
+
 
 function toggleToggleButton(toggle, maritalStatus, clicked) {
     console.log("Toggle:", toggle.attr('id'), "Clicked:", clicked); // Add this line
@@ -77,19 +66,28 @@ function toggleToggleButton(toggle, maritalStatus, clicked) {
     }
 }
 
+function toggleTab(tabId) {
+    // Remove active class from all tabs
+    $('.tab').removeClass('active');
+    // Add active class to the clicked tab
+    $('#' + tabId).addClass('active');
 
-function filterData(maritalStatus) {
-    const isFiltered = $('.bar.' + maritalStatus).length > 0;
+    // Clear the content of the section
+    $('.toggle-section').html('');
 
-    // Remove existing bars
-    $('.bar').remove();
-    $('.dot').remove();
-    $('.marital-dot').remove();
-    
-    // Toggle the filtered chart
-    if (!isFiltered) {
-        drawSunburstChart(stageWidth, stageHeight, renderer, maritalStatus);
-    } else {
-        drawSunburstChart(stageWidth, stageHeight, renderer);
+    // Toggle the "Gender" tab based on the clicked tab
+    if (tabId === 'obsession' || tabId === 'compulsion') {
+        // Deselect the "Gender" tab
+        $('#tab-gender').removeClass('active');
+    }
+
+    // Show content based on the clicked tab
+    if (tabId === 'gender') {
+        // Call the drawSunburstChart function and pass the necessary parameters
+        drawSunburstChart(stageWidth, stageHeight, $('#chart-container'), 'Married'); // You may adjust the parameters as needed
+    } else if (tabId === 'obsession') {
+        // Show content for the Obsession Type tab
+    } else if (tabId === 'compulsion') {
+        // Show content for the Compulsion Type tab
     }
 }
