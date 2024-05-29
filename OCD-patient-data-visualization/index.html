@@ -1,64 +1,68 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
     <meta charset="UTF-8">
-    <title>Aufgabe 6</title>
+    <title>OCD</title>
     <script src="lib/jquery.min.js"></script>
     <script src="lib/gmynd.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/popup.css">
 </head>
-
-<div id="tabs">
-    <div class="tab-list">
-        <div class="tab" id="tab-gender" onclick="toggleTab('gender')">Gender</div>
-        <div class="tab" id="tab-obsession" onclick="toggleTab('obsession')">Obsession Type</div>
-        <div class="tab" id="tab-compulsion" onclick="toggleTab('compulsion')">Compulsion Type</div>
-    </div>
-    
-
-    <div class="toggle-section" id="gender-section">
-        <div id="chart-container"></div>
-    </div>
-    <div class="toggle-section" id="obsession-section">
-        <!-- Content for Obsession Type tab -->
-    </div>
-    <div class="toggle-section" id="compulsion-section">
-        <!-- Content for Compulsion Type tab -->
-    </div>
-
-    <div id="renderer" class="m-5"></div>
-    <div id="buttons" style="position: absolute; top: 200px; right: 50px;">
+<body>
+    <div id="renderer">
         
-        <div id="maritalStatusToggle" style="position: absolute; top: 220px; right: 50px;">
-            <div class="toggle married" id="marriedToggle">Married</div>
-            <div class="toggle single" id="singleToggle">Single</div>
-            <div class="toggle divorced" id="divorcedToggle">Divorced</div>
+        <div id="heading">
+            <h1>Obsessive-compulsive disorder (OCD) Patient</h1>
         </div>
 
-        <div class="button" id="familyHistoryButton">+ Family History of OCD</div>
-        <div class="button" id="depressionButton">+ Depression Diagnosis</div>
-        <div class="button" id="anxietyButton">+ Anxiety Diagnosis</div>
+    <div id="tabs">
+        <div class="tab-list">
+            <div class="tab" id="tab-gender">Gender</div>
+            <div class="tab" id="tab-obsession">Obsession Type</div>
+            <div class="tab" id="tab-compulsion">Compulsion Type</div>
+        </div>
+        
+        <div class="toggle-section" id="gender-section">
+            <div id="chart-container"></div>
+        </div>
+        <div class="toggle-section" id="obsession-section">
+            <!-- Content for Obsession Type tab -->
+        </div>
+        <div class="toggle-section" id="compulsion-section">
+            <!-- Content for Compulsion Type tab -->
+        </div>
 
-        <div id="compulsionTypeToggle" style="display: none; position: absolute; top: 220px; right: 50px;">
-            <div class="toggle" id="checkingToggle">Checking</div>
-            <div class="toggle" id="washingToggle">Washing</div>
-            <div class="toggle" id="orderingToggle">Ordering</div>
-            <div class="toggle" id="prayingToggle">Praying</div>
-            <div class="toggle" id="countingToggle">Counting</div>
+        <div id="renderer" class="m-5"></div>
+        <div id="buttons" style="position: absolute; top: 200px; right: 50px;">
+            <div id="maritalStatusToggle" style="position: absolute; top: 220px; right: 50px;">
+                <div class="toggle married" id="marriedToggle">Married</div>
+                <div class="toggle single" id="singleToggle">Single</div>
+                <div class="toggle divorced" id="divorcedToggle">Divorced</div>
+            </div>
+
+            <div class="button" id="familyHistoryButton">+ Family History of OCD</div>
+            <div class="button" id="depressionButton">+ Depression Diagnosis</div>
+            <div class="button" id="anxietyButton">+ Anxiety Diagnosis</div>
+
+            <div id="compulsionTypeToggle" style="display: none; position: absolute; top: 220px; right: 50px;">
+                <div class="toggle" id="checkingToggle">Checking</div>
+                <div class="toggle" id="washingToggle">Washing</div>
+                <div class="toggle" id="orderingToggle">Ordering</div>
+                <div class="toggle" id="prayingToggle">Praying</div>
+                <div class="toggle" id="countingToggle">Counting</div>
+            </div>
         </div>
     </div>
-</div>
-<div id="popup" class="popup">
-    <div class="popup-content">
-        <span class="close-button">&times;</span>
-        <div class="popup-header">
-            <h2 id="popup-title"></h2>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close-button">&times;</span>
+            <div class="popup-header">
+                <h2 id="popup-title"></h2>
+            </div>
+            <div class="popup-body" id="popup-body"></div>
         </div>
-        <div class="popup-body" id="popup-body"></div>
     </div>
-</div>
 
     <script src="data.js"></script>
     <script src="js/chartDrawer.js"></script>
@@ -66,5 +70,4 @@
     <script src="js/main.js"></script>
     <script src="js/popup.js"></script>
 </body>
-
 </html>

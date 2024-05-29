@@ -1,16 +1,6 @@
-// ToDo: 
-// bisherige sunburst chart muss zu "Gender" tab zugeordnet werden.
-// sunburst Chart in 5 Teile aufteilen für anderen tabs.
-// filtered "married","single" und "divorced" muessen zu bar chart umwandeln.
-// "family History", "depression" und "anxiety" buttons
-// pop-ups: ausgewaehlte bar muss gekenntzeichnet werden
-// mousehover
-// animation
-
 let stage;
 let stageHeight;
 let stageWidth;
-
 
 $(function () {
     renderer = $('#renderer');
@@ -19,42 +9,46 @@ $(function () {
     preparePatientData(ocdData);
     drawSunburstChart(stageWidth, stageHeight, renderer);
 
+    // Initialize the tabs
+    $('#tab-gender').addClass('active');
+    showSection('gender-section');
+    
 
     // Variables to store toggle states
     let marriedClicked = false;
     let singleClicked = false;
     let divorcedClicked = false;
 
-
     // Event listeners for toggle switches
     $('#marriedToggle').click(function () {
-        marriedClicked = !marriedClicked; // Toggle the state
+        marriedClicked = !marriedClicked;
         singleClicked = false;
-        divorcedClicked=false;
+        divorcedClicked = false;
         toggleToggleButton($(this), "Married", marriedClicked);
     });
     
     $('#singleToggle').click(function () {
-        singleClicked = !singleClicked; // Toggle the state
+        singleClicked = !singleClicked;
         marriedClicked = false;
-        divorcedClicked=false;
+        divorcedClicked = false;
         toggleToggleButton($(this), "Single", singleClicked);
     });
     
     $('#divorcedToggle').click(function () {
-        divorcedClicked = !divorcedClicked; // Toggle the state
+        divorcedClicked = !divorcedClicked;
         singleClicked = false;
-        marriedClicked=false;
+        marriedClicked = false;
         toggleToggleButton($(this), "Divorced", divorcedClicked);
     });
-    
+
+    // Event listeners for tabs
+    $('#tab-gender, #tab-obsession, #tab-compulsion').click(function () {
+        let id = $(this).attr('id').split('-')[1] + '-section';
+        handleTabClick(id);
+    });
 });
 
-
-
 function toggleToggleButton(toggle, maritalStatus, clicked) {
-    console.log("Toggle:", toggle.attr('id'), "Clicked:", clicked); // Add this line
-    // Remove active class from other toggles if current toggle is clicked
     if (clicked) {
         $('.toggle').not(toggle).removeClass('active');
     }
@@ -62,32 +56,31 @@ function toggleToggleButton(toggle, maritalStatus, clicked) {
     if (clicked) {
         filterData(maritalStatus);
     } else {
-        filterData(); // Filter with no marital status
+        filterData();
     }
 }
 
-function toggleTab(tabId) {
+
+
+function handleTabClick(sectionId) {
     // Remove active class from all tabs
     $('.tab').removeClass('active');
     // Add active class to the clicked tab
-    $('#' + tabId).addClass('active');
+    $('#tab-' + sectionId.split('-')[0]).addClass('active');
+    // Show the corresponding section
+    showSection(sectionId);
 
-    // Clear the content of the section
-    $('.toggle-section').html('');
-
-    // Toggle the "Gender" tab based on the clicked tab
-    if (tabId === 'obsession' || tabId === 'compulsion') {
-        // Deselect the "Gender" tab
-        $('#tab-gender').removeClass('active');
+    if (id === 'gender-section') {
+        drawSunburstChart(stageWidth, stageHeight, renderer);
     }
-
-    // Show content based on the clicked tab
-    if (tabId === 'gender') {
-        // Call the drawSunburstChart function and pass the necessary parameters
-        drawSunburstChart(stageWidth, stageHeight, $('#chart-container'), 'Married'); // You may adjust the parameters as needed
-    } else if (tabId === 'obsession') {
-        // Show content for the Obsession Type tab
-    } else if (tabId === 'compulsion') {
-        // Show content for the Compulsion Type tab
-    }
+        
 }
+
+function showSection(sectionId) {
+    // Hide all sections
+    $('.toggle-section').hide();
+    // Show the selected section
+    $('#' + sectionId).show();
+}
+
+

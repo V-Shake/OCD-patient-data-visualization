@@ -2,15 +2,6 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, filter) {
     // const gap = 0.1; 
     const scaleFactor = 0.34; // Adjust this value to scale the bar heights
     const maximumAge = Math.max(...patientData.map(patient => patient.age));
-    // const totalCount = patientData.length;
-
-    // Calculate the total width of all bars including gaps
-    // const totalGapWidth = gap * (totalCount - 1);
-    // const barWidth = (stageWidth - totalGapWidth) / totalCount; // Reduced bar width
-    // console.log(stageHeight);
-
-    // const femaleWidth = femalePatients.length * barWidth;
-    // const maleWidth = malePatients.length * barWidth;
 
     let filteredPatients = patientData;
     if (filter) {
@@ -20,13 +11,6 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, filter) {
     const femalePatients = filteredPatients.filter(patient => patient.gender === "Female");
     const malePatients = filteredPatients.filter(patient => patient.gender === "Male");
 
-    // Calculate x offsets for female and male bars
-    // const xOffset = (stageWidth - (femaleWidth + maleWidth)) / 2;
-    // const femaleXOffset = xOffset; // Adjusted xOffset for female bars
-    // const maleXOffset = xOffset + femaleWidth; // Adjusted xOffset for male bars
-
-    // Calculate y offset
-    // const yOffset = (stageHeight - (stageHeight / maximumAge) * scaleFactor) / 2 ;
     let barsGap = 2;
 
     // Draw female bars
@@ -71,20 +55,20 @@ function drawBarChart(stageWidth, stageHeight, renderer, filter) {
     const malePatients = filteredPatients.filter(patient => patient.gender === "Male");
 
     // Calculate y offset
-    let barsGap = 0;
+    let gap = 2;
 
     // Draw female bars
-    const femaleStartX = stageWidth / 2;
+    const femaleStartX = stageWidth / 2 ;
     const femaleStartY = 50;
-    drawHorizontalBars(femalePatients, femaleStartX, femaleStartY, stageWidth, stageHeight, maximumAge, renderer, 'female', barsGap, scaleFactor);
+    drawHorizontalBars(femalePatients, femaleStartX, femaleStartY, stageWidth, stageHeight, maximumAge, renderer, 'female', gap, scaleFactor);
 
     // Draw male bars
-    const maleStartX = stageWidth / 2;
+    const maleStartX = stageWidth / 2 ;
     const maleStartY = 50;
-    drawHorizontalBars(malePatients, maleStartX, maleStartY, stageWidth, stageHeight, maximumAge, renderer, 'male', barsGap, scaleFactor);
+    drawHorizontalBars(malePatients, maleStartX, maleStartY, stageWidth, stageHeight, maximumAge, renderer, 'male', gap, scaleFactor);
 }
 
-function drawHorizontalBars(patients, startX, startY, stageWidth, stageHeight, maximumAge, renderer, gender, barsGap, scaleFactor) {
+function drawHorizontalBars(patients, startX, startY, stageWidth, stageHeight, maximumAge, renderer, gender, gap, scaleFactor) {
     for (let i = 0; i < patients.length; i++) {
         const age = patients[i].age;
         const duration = patients[i].duration;
@@ -95,7 +79,9 @@ function drawHorizontalBars(patients, startX, startY, stageWidth, stageHeight, m
         const x = startX + (gender === 'female' ? 0 : -barHeight);
 
         // Adjusted y position for bars
-        const y = startY + barsGap + ((stageHeight - barsGap * patients.length) / patients.length) * i;
+        // const y = startY + gap + ((stageHeight - gap * patients.length) / patients.length) * i;
+        const y = startY + gap * i;
+        // console.log(y);
 
         drawHorizontalBar(barHeight, x, y, gender, renderer, duration, maritalStatus, age);
     }
@@ -121,13 +107,14 @@ function drawHorizontalBar(barHeight, x, y, gender, renderer, duration, maritalS
     bar.addClass('bar ' + gender);
     bar.css({
         'width': barHeight,
-        'height': 0.1,
+        'height': 0.5,
         'left': x,
         'top': y,
         'transform-origin': 'center',
         'transform': gender === 'female' ? 'none' : 'rotate(180deg)',
         'background-color': `rgb(${color[0]}, ${color[1]}, ${color[2]})`
     });
+
 
     renderer.append(bar);
 
