@@ -2,12 +2,28 @@ let stage;
 let stageHeight;
 let stageWidth;
 
+/**
+ * TODO
+ * extract binary sunburst chart
+ * update graph by switching graph
+ * implement familiy history etc.
+ * marital bar chart spacing, extract
+ */
+
 $(function () {
     renderer = $('#renderer');
     stageWidth = renderer.width();
     stageHeight = renderer.height();
     preparePatientData(ocdData);
-    drawSunburstChart(stageWidth, stageHeight, renderer);
+    colors_gender = [
+        [[252, 210, 211],[224, 115, 115],[85, 20, 24]],
+        [[213, 222, 255],[125, 158, 235],[21, 37, 94]]
+    ];
+    tag_gender = [
+        "gender",
+        ["Female","Male"]
+    ]
+    drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
 
     // Initialize the tabs
     $('#tab-gender').addClass('active');
@@ -70,8 +86,14 @@ function handleTabClick(sectionId) {
     // Show the corresponding section
     showSection(sectionId);
 
-    if (id === 'gender-section') {
-        drawSunburstChart(stageWidth, stageHeight, renderer);
+
+    if (sectionId === 'gender-section') {
+        drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
+    } else if (sectionId === 'obsession-section') {
+        drawObsessionChart(stageWidth, stageHeight, renderer);
+    } else if (sectionId === 'compulsion-section') {
+        // Call the function to draw the compulsion chart (assumed to exist)
+        drawCompulsionChart(stageWidth, stageHeight, renderer);
     }
         
 }
