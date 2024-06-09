@@ -1,10 +1,11 @@
-function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersInCategory, colors) {
+function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersInCategory, colors,innerStatus) {
     /**
      * age, marital status/dot type fixed
      * get scale and max age
      * split patients into groups determined by given category and elements within
      */
 
+    clean();
     const gap = 4; 
     const scaleFactor = 0.34; // Adjust this value to scale the bar heights
     const maximumAge = Math.max(...patientData.map(patient => patient.age));
@@ -30,8 +31,14 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
         startAngles[i] = offset;
         offset = offset + usableArea * (segmentArea[i]);
     }
-
     // draw sunburst chart for each group in groups
+    const radius = 100; // Initial radius
+    const innerRadius = 20;
+    const innerColor = [
+        [0,0,0],
+        [0,0,0],
+        [0,0,0]
+    ];
     for (let i = 0; i < groups.length; i++) {
         group = groups[i];
         for (let j = 0; j < group.length; j++) {
@@ -41,10 +48,29 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
             const barHeight = (stageHeight / maximumAge) * age * scaleFactor; // Apply the scale factor
             const angle = startAngles[i] + j * angleForEachBar + i * gap;
             const radians = gmynd.radians(angle);
-            const radius = 100; // Initial radius
             const x = stageWidth / 2 + Math.cos(radians) * radius; // Adjusted x position for female bars
             const y = stageHeight / 2 - barHeight + Math.sin(radians) * radius; // Adjusted y position
             const color = colors[i];
+            // draw inner circle if top right buttons toggled
+            let connection;
+            switch (innerStatus) {
+                case "familyHistory":
+                    connection = group[j].familyHistory;
+                    break;
+                case "depression":
+                    connection = group[j].depressionDiagnosis;
+                    break;
+                case "anxiety":
+                    connection = group[j].anxietyDiagnosis;
+                    break;
+                default:
+                    break;
+            }
+            if (connection === "Yes") {
+                const innerX = stageWidth / 2 + Math.cos(radians) * innerRadius; // Adjusted x position for female bars
+                const innerY = stageHeight / 2 - (radius-innerRadius) + Math.sin(radians) * innerRadius; // Adjusted y position
+                drawBar((radius-innerRadius), innerX, innerY, angle, membersInCategory[i], renderer, duration, maritalStatus, radians, age,innerColor);
+            }
             drawBar(barHeight, x, y, angle, membersInCategory[i], renderer, duration, maritalStatus, radians, age,color);
         }
     }
@@ -94,6 +120,7 @@ function drawSunburstChart_o(stageWidth, stageHeight, renderer, filter) {
 }
 
 function drawBarChart(stageWidth, stageHeight, renderer, filter) {
+    clean();
     const scaleFactor = 0.34; // Adjust this value to scale the bar heights
     const maximumAge = Math.max(...patientData.map(patient => patient.age));
 
@@ -109,13 +136,13 @@ function drawBarChart(stageWidth, stageHeight, renderer, filter) {
     let gap = 2;
 
     // Draw female bars
-    const femaleStartX = stageWidth / 2 ;
-    const femaleStartY = 50;
+    const femaleStartX = stageWidth / 2 + 10;
+    const femaleStartY = 90;
     drawHorizontalBars(femalePatients, femaleStartX, femaleStartY, stageWidth, stageHeight, maximumAge, renderer, 'female', gap, scaleFactor);
 
     // Draw male bars
-    const maleStartX = stageWidth / 2 ;
-    const maleStartY = 50;
+    const maleStartX = stageWidth / 2 - 10;
+    const maleStartY = 90;
     drawHorizontalBars(malePatients, maleStartX, maleStartY, stageWidth, stageHeight, maximumAge, renderer, 'male', gap, scaleFactor);
 }
 
@@ -358,7 +385,8 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         'top': y,
         'transform-origin': 'bottom center',
         'transform': `rotate(${angle + 90}deg)`,
-        'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`
+        'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+        // opacity: 0.5,
     });
 
     renderer.append(bar);
