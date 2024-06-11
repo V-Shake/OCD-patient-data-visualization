@@ -17,7 +17,7 @@ family_history_weights = [0.1, 0.9]
 depression_weights = [0.1, 0.9]  # 10% Yes, 90% No
 anxiety_weights = [0.1, 0.9]  # 10% Yes, 90% No
 obsession_weights = [20, 30, 10, 15, 20]  # Harm-related is twice as likely
-compulsion_weights = [25, 25, 20, 15, 15]  # Equal chance for each
+compulsion_weights = [1, 1, 1, 1, 1]  # Equal chance for each
 
 # Weights for the above mappings
 obsession_to_compulsion_weights = {
@@ -38,7 +38,7 @@ def modify_data(data):
         record["Compulsion Type"] = random.choices(compulsion_types,
                                                    weights=obsession_to_compulsion_weights[record["Obsession Type"]],
                                                    k=1)[0]
-        record["Duration of Symptoms (months)"] =  random.randint(1, 400)
+        record["Duration of Symptoms (months)"] = random.randint(1, 400)
         record["Family History of OCD"] = random.choices(family_history_choices, weights=family_history_weights, k=1)[0]
         record["Depression Diagnosis"] = random.choices(depression_diagnosis_choices, weights=depression_weights, k=1)[0]
         record["Anxiety Diagnosis"] = random.choices(anxiety_diagnosis_choices, weights=anxiety_weights, k=1)[0]

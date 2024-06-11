@@ -13,9 +13,17 @@
 
 h1 {
     font-family: helvetica;
-    font-size: 25px;
+    font-size: 20px;
     margin-left: 50px; 
     margin-top: 50px;
+}
+
+h2 {
+    font-family: helvetica;
+    font-size: 12px;
+    margin-left: 50px; 
+    margin-top: 30px;
+    font-weight: 400;
 }
 
 
@@ -78,18 +86,34 @@ body {
     cursor: pointer;
 }
 
+.buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: .5rem;
+    background-color: transparent;
+    position: absolute;
+    top: 40%;
+    right: 50px; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Center the tab list vertically */
+    z-index: 200000;
+}
+
 
 .button {
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgb(253, 253, 241);
-    /* border: 1px solid #4e4e4e; */
-    margin-right: 20px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    color: rgb(90, 90, 90);
-    display: block;
+    padding: .5rem;
+    /* background-color: #4e4e4e;  */
+    outline: none;
+    min-width: 100px; /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
     font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+    border-radius: 3px;
+    color: rgb(90, 90, 90); /* Change the text color */
 }
 
 .button.active {
@@ -100,19 +124,34 @@ body {
     opacity: var(--hover-opacity, 0.6); /* Adjust the opacity on hover */
 }
 
+.toggles{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: .5rem;
+    background-color: transparent;
+    position: absolute;
+    top: 65%;
+    right: 130px; /* Adjust the left position as needed */
+    transform: translateY(-50%); /* Center the tab list vertically */
+    z-index: 200000;
+}
+
 
 .toggle {
-    padding: 5px;
-    /* border-radius: 5px; */
-    /* border: 1px solid #4e4e4e; */
-    margin-right: 20px;
-    margin-bottom: 10px;
-    gap: .5rem;
-    cursor: pointer;
-    display: inline-block;
-    /* background-color: var(--toggle-background-color, #606060); */
-    color: var(--toggle-text-color, rgb(90, 90, 90));
+    padding: .5rem;
+    /* background-color: #4e4e4e;  */
+    outline: none;
+    min-width: 65px; /* Adjust the width as needed */
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border: none;
     font-size: 12px;
+    cursor: pointer;
+    transition: opacity 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+    border-radius: 3px;
+    color: rgb(90, 90, 90); /* Change the text color */
 }
 
 .toggle.active {
@@ -206,7 +245,9 @@ body {
     display: block;
 }
 
-
+.hidden {
+    display: none;
+}
 
 /* 
 .bar.female {

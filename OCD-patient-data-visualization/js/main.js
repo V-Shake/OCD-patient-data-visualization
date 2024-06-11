@@ -53,6 +53,10 @@ $(function () {
     
     let id = $('#tab-gender').attr('id').split('-')[1] + '-section';
 
+    // hidw other toggles
+    hideObsessionToggle();
+    hideCompulsionToggle();
+
     // Variables to store toggle states
     let marriedClicked = false;
     let singleClicked = false;
@@ -184,18 +188,29 @@ function handleTabClick(sectionId) {
     switch (sectionId) {
         case 'gender-section':
             drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
+            hideObsessionToggle();
+            hideCompulsionToggle();
+            revealMaritalToggle();
             break;
         case 'obsession-section':
             drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
+            hideMaritalToggle();
+            hideCompulsionToggle();
+            revealObsessionToggle();
             break;
         case 'compulsion-section':
             drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion);
+            hideMaritalToggle();
+            hideObsessionToggle();
+            revealCompulsionToggle();
             break;    
         default:
             console.log("unexpected output");
             break;
     }
 
+
+    
     // if (sectionId === 'gender-section') {
     //     drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
     // } else if (sectionId === 'obsession-section') {
@@ -204,6 +219,74 @@ function handleTabClick(sectionId) {
     //     drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_compulsion);
     // }
         
+}
+function revealMaritalToggle() {
+    const marriedToggle = document.getElementById('marriedToggle');
+    const singleToggle = document.getElementById('singleToggle');
+    const divorcedToggle = document.getElementById('divorcedToggle');
+    marriedToggle.classList.remove('hidden');
+    singleToggle.classList.remove('hidden');
+    divorcedToggle.classList.remove('hidden');
+}
+
+function revealObsessionToggle() {
+    const harmRelatedToggle = document.getElementById('harm-relatedToggle');
+    const hoardingToggle = document.getElementById('hoardingToggle');
+    const symmetryToggle = document.getElementById('symmetryToggle');
+    const religiousToggle = document.getElementById('religiousToggle');
+    const contaminationToggle = document.getElementById('contaminationToggle');
+    harmRelatedToggle.classList.remove('hidden');
+    hoardingToggle.classList.remove('hidden');
+    symmetryToggle.classList.remove('hidden');
+    religiousToggle.classList.remove('hidden');
+    contaminationToggle.classList.remove('hidden');
+}
+
+function revealCompulsionToggle() {
+    const checkingToggle = document.getElementById('checkingToggle');
+    const washingToggle = document.getElementById('washingToggle');
+    const orderingToggle = document.getElementById('orderingToggle');
+    const prayingToggle = document.getElementById('prayingToggle');
+    const countingToggle = document.getElementById('countingToggle');
+    checkingToggle.classList.remove('hidden');
+    washingToggle.classList.remove('hidden');
+    orderingToggle.classList.remove('hidden');
+    prayingToggle.classList.remove('hidden');
+    countingToggle.classList.remove('hidden');
+}
+function hideMaritalToggle() {
+    const marriedToggle = document.getElementById('marriedToggle');
+    const singleToggle = document.getElementById('singleToggle');
+    const divorcedToggle = document.getElementById('divorcedToggle');
+    marriedToggle.classList.add('hidden');
+    singleToggle.classList.add('hidden');
+    divorcedToggle.classList.add('hidden');
+}
+
+function hideObsessionToggle() {
+    const harmRelatedToggle = document.getElementById('harm-relatedToggle');
+    const hoardingToggle = document.getElementById('hoardingToggle');
+    const symmetryToggle = document.getElementById('symmetryToggle');
+    const religiousToggle = document.getElementById('religiousToggle');
+    const contaminationToggle = document.getElementById('contaminationToggle');
+    harmRelatedToggle.classList.add('hidden');
+    hoardingToggle.classList.add('hidden');
+    symmetryToggle.classList.add('hidden');
+    religiousToggle.classList.add('hidden');
+    contaminationToggle.classList.add('hidden');
+}
+
+function hideCompulsionToggle() {
+    const checkingToggle = document.getElementById('checkingToggle');
+    const washingToggle = document.getElementById('washingToggle');
+    const orderingToggle = document.getElementById('orderingToggle');
+    const prayingToggle = document.getElementById('prayingToggle');
+    const countingToggle = document.getElementById('countingToggle');
+    checkingToggle.classList.add('hidden');
+    washingToggle.classList.add('hidden');
+    orderingToggle.classList.add('hidden');
+    prayingToggle.classList.add('hidden');
+    countingToggle.classList.add('hidden');
 }
 
 function showSection(sectionId) {
