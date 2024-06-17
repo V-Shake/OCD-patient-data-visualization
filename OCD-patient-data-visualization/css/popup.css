@@ -22,7 +22,7 @@
 /* Popup close button */
 .close-button {
     position: absolute;
-    top: 20px;
+    top: 45px;
     right: 30px;
     font-size: 20px;
     cursor: pointer;
@@ -37,8 +37,10 @@
 }
 
 .popup-header h2 {
-    margin: 5px;
-    font-size: 14px;
+    margin-left: 1px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 550;
 }
 
 /* Popup body */

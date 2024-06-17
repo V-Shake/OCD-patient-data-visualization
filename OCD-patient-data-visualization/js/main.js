@@ -116,6 +116,26 @@ $(function () {
         id = $(this).attr('id').split('-')[1] + '-section';
         handleTabClick(id);
     });
+
+
+    let harmRelatedClicked = false;
+    let hoardingClicked = false;
+    let SymmetryClicked = false;
+    let religiousClicked = false;
+    let contaminationClicked = false;
+
+    // Event listeners for toggle switches
+    $('#harm-relatedToggle').click(function () {
+        harmRelatedClicked = !harmRelatedClicked;
+        hoardingClicked = false;
+        SymmetryClicked = false;
+        religiousClicked = false;
+        contaminationClicked = false;
+        toggleObsessionButton($(this), "harm-related", harmRelatedClicked);
+    });
+    
+   
+
 });
 
 function toggleToggleButton(thisButton, status, clicked, sectionId) {
@@ -162,11 +182,62 @@ function toggleMaritalButton(toggle, maritalStatus, clicked) {
     }
     toggle.toggleClass('active');
     if (clicked) {
-        drawBarChart(stageWidth, stageHeight, renderer, maritalStatus);
+        // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
+        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "horizontal");
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
     }
 }
+
+function toggleObsessionButton(toggle, maritalStatus, clicked) {
+    if (clicked) {
+        $('.toggle').not(toggle).removeClass('active');
+    }
+    toggle.toggleClass('active');
+    if (clicked) {
+        // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
+        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "vertical");
+    } else {
+        drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
+    }
+}
+
+// Define function to handle toggle buttons
+function handleToggle(toggleId, category) {
+    // Variables to store toggle states
+    let toggles = ["checking", "washing", "ordering", "praying", "counting"]; // For obsession type
+    let clicked = toggles.map(toggle => toggle === category); // Initialize all toggles to false except the clicked one
+
+    // Event listeners for toggle switches
+    $('#' + toggleId).click(function () {
+        clicked = toggles.map(toggle => toggle === category);
+        toggleButtons($(this), category, clicked);
+    });
+}
+
+// Function to toggle buttons
+function toggleButtons(toggle, category, clicked) {
+    clicked = clicked.map((click, index) => index === category);
+    if (clicked) {
+        $('.toggle').not(toggle).removeClass('active');
+    }
+    toggle.toggleClass('active');
+    if (clicked) {
+        // Handle the action for when the button is clicked
+        drawBarChart(stageWidth, stageHeight, renderer, category);
+    } else {
+        // Handle the action for when the button is not clicked
+        drawSunburstChart(stageWidth, stageHeight, renderer, tag_gender[0], tag_gender[1], colors_gender);
+    }
+}
+
+// Set up event listeners for obsession type toggles
+$('.toggles').each(function() {
+    $(this).children('.toggle').each(function(index) {
+        handleToggle($(this).attr('id'), index);
+    });
+});
+
 
 function clean() {
     // Remove existing bars
