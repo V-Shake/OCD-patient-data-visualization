@@ -133,6 +133,43 @@ $(function () {
         contaminationClicked = false;
         toggleObsessionButton($(this), "harm-related", harmRelatedClicked);
     });
+
+    $('#hoardingToggle').click(function () {
+        harmRelatedClicked = false;
+        hoardingClicked = !hoardingClicked;
+        SymmetryClicked = false;
+        religiousClicked = false;
+        contaminationClicked = false;
+        toggleObsessionButton($(this), "hoarding", hoardingClicked);
+    });
+
+    $('#symmetryToggle').click(function () {
+        harmRelatedClicked = false;
+        hoardingClicked = false;
+        SymmetryClicked = !SymmetryClicked;
+        religiousClicked = false;
+        contaminationClicked = false;
+        toggleObsessionButton($(this), "Symmetry", SymmetryClicked);
+    });
+
+    $('#religiousToggle').click(function () {
+        harmRelatedClicked = false;
+        hoardingClicked = false;
+        SymmetryClicked = false;
+        religiousClicked = !religiousClicked;
+        contaminationClicked = false;
+        toggleObsessionButton($(this), "religious", religiousClicked);
+    });
+
+    $('#contaminationToggle').click(function () {
+        harmRelatedClicked = false;
+        hoardingClicked = false;
+        SymmetryClicked = false;
+        religiousClicked = false;
+        contaminationClicked = !contaminationClicked;
+        toggleObsessionButton($(this), "contamination", contaminationClicked);
+    });
+
     
    
 
@@ -189,14 +226,14 @@ function toggleMaritalButton(toggle, maritalStatus, clicked) {
     }
 }
 
-function toggleObsessionButton(toggle, maritalStatus, clicked) {
+function toggleObsessionButton(toggle, obsessionStatus, clicked) {
     if (clicked) {
         $('.toggle').not(toggle).removeClass('active');
     }
     toggle.toggleClass('active');
     if (clicked) {
         // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
-        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "vertical");
+        drawBars(stageWidth, stageHeight, renderer, obsessionStatus, "vertical");
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
     }

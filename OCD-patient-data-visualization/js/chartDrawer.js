@@ -299,8 +299,7 @@ function drawVerticalBars(patients, startX, startY, stageWidth, stageHeight, max
     });
 }
 
-function drawVerticalBar(barWidth, x, y, gender, renderer, duration, maritalStatus,
-    age) {
+function drawVerticalBar(barWidth, x, y, gender, renderer, duration, maritalStatus, age) {
     const color = calculateColorGender(gender, duration);
     const bar = createVerticalBar(gender, x, y, barHeight, color);
     const dot = createDot(color, x + barWidth - 0.1, y); // Adjusted dot position for vertical bars
