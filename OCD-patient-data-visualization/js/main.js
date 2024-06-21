@@ -133,43 +133,6 @@ $(function () {
         contaminationClicked = false;
         toggleObsessionButton($(this), "harm-related", harmRelatedClicked);
     });
-
-    $('#hoardingToggle').click(function () {
-        harmRelatedClicked = false;
-        hoardingClicked = !hoardingClicked;
-        SymmetryClicked = false;
-        religiousClicked = false;
-        contaminationClicked = false;
-        toggleObsessionButton($(this), "hoarding", hoardingClicked);
-    });
-
-    $('#symmetryToggle').click(function () {
-        harmRelatedClicked = false;
-        hoardingClicked = false;
-        SymmetryClicked = !SymmetryClicked;
-        religiousClicked = false;
-        contaminationClicked = false;
-        toggleObsessionButton($(this), "Symmetry", SymmetryClicked);
-    });
-
-    $('#religiousToggle').click(function () {
-        harmRelatedClicked = false;
-        hoardingClicked = false;
-        SymmetryClicked = false;
-        religiousClicked = !religiousClicked;
-        contaminationClicked = false;
-        toggleObsessionButton($(this), "religious", religiousClicked);
-    });
-
-    $('#contaminationToggle').click(function () {
-        harmRelatedClicked = false;
-        hoardingClicked = false;
-        SymmetryClicked = false;
-        religiousClicked = false;
-        contaminationClicked = !contaminationClicked;
-        toggleObsessionButton($(this), "contamination", contaminationClicked);
-    });
-
     
    
 
@@ -189,7 +152,7 @@ function toggleToggleButton(thisButton, status, clicked, sectionId) {
                 drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession,status);
                 break;
             case 'compulsion-section':
-                drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_compulsion,status);
+                drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion,status);
                 break;    
             default:
                 console.log("unexpected output");
@@ -204,7 +167,7 @@ function toggleToggleButton(thisButton, status, clicked, sectionId) {
                 drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
                 break;
             case 'compulsion-section':
-                drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_compulsion);
+                drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion);
                 break;    
             default:
                 console.log("unexpected output");
@@ -226,14 +189,14 @@ function toggleMaritalButton(toggle, maritalStatus, clicked) {
     }
 }
 
-function toggleObsessionButton(toggle, obsessionStatus, clicked) {
+function toggleObsessionButton(toggle, maritalStatus, clicked) {
     if (clicked) {
         $('.toggle').not(toggle).removeClass('active');
     }
     toggle.toggleClass('active');
     if (clicked) {
         // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
-        drawBars(stageWidth, stageHeight, renderer, obsessionStatus, "vertical");
+        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "vertical");
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
     }

@@ -13,7 +13,7 @@ anxiety_diagnosis_choices = ["Yes", "No"]
 employment_statuses = ["Employed", "Unemployed"]
 
 # Define weights for some fields
-genders_weights = [0.432, 0.568]
+genders_weights = [0.462, 0.538]
 family_history_weights = [0.12, 0.88]
 depression_weights = [0.05, 0.95]  # 10% Yes, 90% No
 anxiety_weights = [0.06, 0.94]  # 10% Yes, 90% No

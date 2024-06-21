@@ -129,9 +129,20 @@ function filterData(maritalStatus) {
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
     }
+
+    if (filter.obsessionTypes && filter.obsessionTypes.length > 0) {
+        filteredPatients = filteredPatients.filter(patient => {
+            // Check if any of the patient's obsession types match the selected types
+            return filter.obsessionTypes.some(type => patient.obsessionTypes.includes(type));
+        });
+    }
+
+    return filteredPatients;
 }
 
 function filterByFamilyHistory() {
     const filteredPatients = patientData.filter(patient => patient["Family History of OCD"] === "Yes");
     return filteredPatients;
+
+    
 }

@@ -75,49 +75,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
         }
     }
 }
-function drawSunburstChart_o(stageWidth, stageHeight, renderer, filter) {
-    // const gap = 0.1; 
-    const scaleFactor = 0.34; // Adjust this value to scale the bar heights
-    const maximumAge = Math.max(...patientData.map(patient => patient.age));
 
-    let filteredPatients = patientData;
-    if (filter) {
-        filteredPatients = patientData.filter(patient => patient.maritalStatus === filter);
-    }
-
-    const femalePatients = filteredPatients.filter(patient => patient.gender === "Female");
-    const malePatients = filteredPatients.filter(patient => patient.gender === "Male");
-
-    let barsGap = 2;
-
-    // Draw female bars
-    for (let i = 0; i < femalePatients.length; i++) {
-        const age = femalePatients[i].age;
-        const duration = femalePatients[i].duration;
-        const maritalStatus = femalePatients[i].maritalStatus;
-        const barHeight = (stageHeight / maximumAge) * age * scaleFactor; // Apply the scale factor
-        const angle = 270 + barsGap + (360 * femalePatients.length / patientData.length - 2 * barsGap) / femalePatients.length * i;
-        const radians = gmynd.radians(angle);
-        const radius = 100; // Initial radius
-        const x = stageWidth / 2 + Math.cos(radians) * radius; // Adjusted x position for female bars
-        const y = stageHeight / 2 - barHeight + Math.sin(radians) * radius; // Adjusted y position
-        drawBar(barHeight, x, y, angle, 'female', renderer, duration, maritalStatus, radians, age);
-    }
-
-    // Draw male bars
-    for (let i = 0; i < malePatients.length; i++) {
-        const age = malePatients[i].age;
-        const duration = malePatients[i].duration;
-        const maritalStatus = malePatients[i].maritalStatus;
-        const barHeight = (stageHeight / maximumAge) * age * scaleFactor; // Apply the scale factor
-        const angle = 270 + (360 * femalePatients.length / patientData.length) + barsGap + (360 * malePatients.length / patientData.length - 2 * barsGap) / malePatients.length * i;
-        const radians = gmynd.radians(angle);
-        const radius = 100; // Initial radius
-        const x = stageWidth / 2 + Math.cos(radians) * radius; // Adjusted x position for male bars
-        const y = stageHeight / 2 - barHeight + Math.sin(radians) * radius; // Adjusted y position
-        drawBar(barHeight, x, y, angle, 'male', renderer, duration, maritalStatus, radians, age);
-    }
-}
 
 function drawBarChart(stageWidth, stageHeight, renderer, filter) {
     clean();
@@ -330,7 +288,7 @@ function drawBars(stageWidth, stageHeight, renderer, filter, orientation) {
     if (orientation === 'horizontal') {
         drawBarChart(stageWidth, stageHeight, renderer, filter);
     } else if (orientation === 'vertical') {
-        drawVerticalBar(stageWidth, stageHeight, renderer, filter);
+        drawVerticalBar(barWidth, x, y, gender, renderer, duration, maritalStatus, age);
     } else {
         console.error("Invalid orientation specified.");
     }
