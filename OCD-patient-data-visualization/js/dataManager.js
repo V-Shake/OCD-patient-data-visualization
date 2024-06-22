@@ -1,6 +1,6 @@
 let femalePatients = [];
 let malePatients = [];
-let patientData = [];
+let ocdData = [];
 let minDuration, maxDuration;
 
 function preparePatientData(ocdData) {
@@ -24,25 +24,7 @@ function preparePatientData(ocdData) {
         const anxietyDiagnosis = patient["Anxiety Diagnosis"];
         const compulsionType = patient["Compulsion Type"];
         const obsessionType = patient["Obsession Type"];
-
-
-
-
-        // // change propability of 50% Yes to 5% Yes 
-        // if (familyHistory == "Yes") {
-        //     if (Math.random() < 0.9) {
-        //         familyHistory = "No";
-        //     }
-        // }
-
-        // // make duration shorter for very old and young people
-        // let ageDiff = Math.abs(patient.Age - 50) / 50  // big number for old and young people
-        // if (Math.random() < 0.8) {
-        //     duration = duration * (1 - ageDiff);
-        // }
-    
-
-
+        const y_bocs_obsession = patient["Y-BOCS Score (Obsessions)"];
 
         const patientEntry = {
             age: patient.Age,
@@ -53,10 +35,11 @@ function preparePatientData(ocdData) {
             depressionDiagnosis,
             anxietyDiagnosis,
             compulsionType,
-            obsessionType
+            obsessionType,
+            y_bocs_obsession
         };
 
-        patientData.push(patientEntry);
+        ocdData.push(patientEntry);
 
         if (patient.Gender === "Female") {
             femalePatients.push(patientEntry);
@@ -84,7 +67,7 @@ function preparePatientData(ocdData) {
         }
     });
 
-    gmynd.sortData(patientData, 'duration');
+    gmynd.sortData(ocdData, 'duration');
     gmynd.sortData(femalePatients, 'duration');
     gmynd.sortData(malePatients, 'duration');
     gmynd.sortData(harmRelatedPatients, 'duration');
@@ -96,7 +79,7 @@ function preparePatientData(ocdData) {
     return {
         minDuration,
         maxDuration,
-        patientData,
+        patientData: ocdData,
         femalePatients,
         malePatients,
         harmRelatedPatients,
@@ -105,44 +88,4 @@ function preparePatientData(ocdData) {
         hoardingPatients,
         religiousPatients
     };
-}
-
-
-
-function filterData(maritalStatus) {
-    const isFiltered = $('.bar.' + maritalStatus).length > 0;
-    console.log($('.bar.' + maritalStatus).length);
-    // Remove existing bars
-    $('.bar').remove();
-    $('.dot').remove();
-    $('.marital-dot').remove();
-    
-    
-    // Toggle the filtered chart
-    if (!isFiltered) {
-        // if (maritalStatus === "Married") {
-        //     drawBarChart(stageWidth, stageHeight, renderer, maritalStatus);
-        // } else {
-        //     drawSunburstChart(stageWidth, stageHeight, renderer, tag_gender[0],tag_gender[1],colors_gender);
-        // }
-        drawBarChart(stageWidth, stageHeight, renderer, maritalStatus);
-    } else {
-        drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
-    }
-
-    if (filter.obsessionTypes && filter.obsessionTypes.length > 0) {
-        filteredPatients = filteredPatients.filter(patient => {
-            // Check if any of the patient's obsession types match the selected types
-            return filter.obsessionTypes.some(type => patient.obsessionTypes.includes(type));
-        });
-    }
-
-    return filteredPatients;
-}
-
-function filterByFamilyHistory() {
-    const filteredPatients = patientData.filter(patient => patient["Family History of OCD"] === "Yes");
-    return filteredPatients;
-
-    
 }

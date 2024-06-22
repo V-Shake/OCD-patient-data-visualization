@@ -4,23 +4,29 @@ let stageWidth;
 
 /**
  * TODO
- * extract binary sunburst chart
- * update graph by switching graph
- * implement familiy history etc.
- * marital bar chart spacing, extract
+ * extract binary sunburst chart: done
+ * update graph by switching graph: done
+ * implement familiy history etc.: done
+ * marital bar chart spacing, extract: done
+ * 
+ * vertical bar for compulsion :done
+ * hover for vertical bar chart: done
+ * color for vertical bar chart: done
+ * auto placing vertical bar chart: 
+ * potential optimizing by reducing memory allocation
  */
 
 $(function () {
     renderer = $('#renderer');
     stageWidth = renderer.width();
     stageHeight = renderer.height();
-    preparePatientData(ocdData);
+    // preparePatientData(ocdData);
     colors_gender = [
         [[252, 210, 211],[224, 115, 115],[85, 20, 24]],
         [[213, 222, 255],[125, 158, 235],[21, 37, 94]]
     ];
     tag_gender = [
-        "gender",
+        "Gender",
         ["Female","Male"]
     ]
     colors_obsession = [
@@ -31,7 +37,7 @@ $(function () {
         [[111, 112, 190],[62, 63, 130],[22, 23, 59]]
     ];
     tag_obsession = [
-        "obsessionType",
+        "Obsession Type",
         ["Harm-related","Hoarding","Symmetry","Religious","Contamination"]
     ]
     colors_compulsion = [
@@ -42,7 +48,7 @@ $(function () {
         [[172, 212, 210],[139, 191, 189],[130, 184, 184]]
     ];
     tag_compulsion = [
-        "compulsionType",
+        "Compulsion Type",
         ["Washing","Checking","Praying","Counting","Ordering"]
     ]
     drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
@@ -118,22 +124,92 @@ $(function () {
     });
 
 
-    let harmRelatedClicked = false;
-    let hoardingClicked = false;
-    let SymmetryClicked = false;
-    let religiousClicked = false;
-    let contaminationClicked = false;
+    let toggleObsessionStates = {
+        Harm_related: false,
+        Hoarding: false,
+        Symmetry: false,
+        Religious: false,
+        Contamination: false
+    };
 
-    // Event listeners for toggle switches
-    $('#harm-relatedToggle').click(function () {
-        harmRelatedClicked = !harmRelatedClicked;
-        hoardingClicked = false;
-        SymmetryClicked = false;
-        religiousClicked = false;
-        contaminationClicked = false;
-        toggleObsessionButton($(this), "harm-related", harmRelatedClicked);
+    // Function to handle the toggle and reset states
+    function handleObsessionToggle(colors,selectedToggle) {
+        // Reset all toggle states
+        for (let key in toggleObsessionStates) {
+            if (key != selectedToggle) {
+                toggleObsessionStates[key] = false;
+            } else {
+                toggleObsessionStates[key] = !toggleObsessionStates[key];
+            }
+        }
+        // Update the UI accordingly
+        toggleObsessionButton(colors,$(`#${selectedToggle}Toggle`), selectedToggle, toggleObsessionStates[selectedToggle]);
+    }
+    
+        // Event listeners for toggle switches
+    $('#Harm_relatedToggle').click(function () {
+        handleObsessionToggle(colors_obsession[0],"Harm_related");
+    });
+
+    $('#HoardingToggle').click(function () {
+        handleObsessionToggle(colors_obsession[1],"Hoarding");
+    });
+
+    $('#SymmetryToggle').click(function () {
+        handleObsessionToggle(colors_obsession[2],"Symmetry");
+    });
+
+    $('#ReligiousToggle').click(function () {
+        handleObsessionToggle(colors_obsession[3],"Religious");
+    });
+
+    $('#ContaminationToggle').click(function () {
+        handleObsessionToggle(colors_obsession[4],"Contamination");
     });
     
+
+    let toggleCompulsionStates = {
+        Washing: false,
+        Checking: false,
+        Praying: false,
+        Counting: false,
+        Ordering: false
+    };
+
+    // Function to handle the toggle and reset states
+    function handleCompulsionToggle(colors,selectedToggle) {
+        // Reset all toggle states
+        for (let key in toggleCompulsionStates) {
+            if (key != selectedToggle) {
+                toggleCompulsionStates[key] = false;
+            } else {
+                toggleCompulsionStates[key] = !toggleCompulsionStates[key];
+            }
+        }
+        // Update the UI accordingly
+        toggleCompulsionButton(colors,$(`#${selectedToggle}Toggle`), selectedToggle, toggleCompulsionStates[selectedToggle]);
+    }
+    
+        // Event listeners for toggle switches
+    $('#CheckingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[0],"Checking");
+    });
+
+    $('#WashingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[1],"Washing");
+    });
+
+    $('#OrderingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[2],"Ordering");
+    });
+
+    $('#PrayingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[3],"Praying");
+    });
+
+    $('#CountingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[4],"Counting");
+    });
    
 
 });
@@ -183,22 +259,35 @@ function toggleMaritalButton(toggle, maritalStatus, clicked) {
     toggle.toggleClass('active');
     if (clicked) {
         // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
-        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "horizontal");
+        drawBars(null,stageWidth, stageHeight, renderer, "maritalStatus", maritalStatus, "horizontal");
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
     }
 }
 
-function toggleObsessionButton(toggle, maritalStatus, clicked) {
-    if (clicked) {
-        $('.toggle').not(toggle).removeClass('active');
+function toggleObsessionButton(colors,toggleName, obsessionStatus, activated) {
+    console.log(`${toggleName.attr('id')} is now ${activated ? 'on' : 'off'}`);
+    if (activated) {
+        $('.toggle').not(toggleName).removeClass('active');
     }
-    toggle.toggleClass('active');
-    if (clicked) {
-        // drawBarChart_o(stageWidth, stageHeight, renderer, maritalStatus);
-        drawBars(stageWidth, stageHeight, renderer, maritalStatus, "vertical");
+    toggleName.toggleClass('active');
+    if (activated) {
+        drawBars(colors,stageWidth, stageHeight, renderer, "Obsession Type", obsessionStatus, "vertical");
     } else {
         drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
+    }
+}
+
+function toggleCompulsionButton(colors,toggleName, compulsionStatus, activated) {
+    console.log(`${toggleName.attr('id')} is now ${activated ? 'on' : 'off'}`);
+    if (activated) {
+        $('.toggle').not(toggleName).removeClass('active');
+    }
+    toggleName.toggleClass('active');
+    if (activated) {
+        drawBars(colors,stageWidth, stageHeight, renderer, "Compulsion Type", compulsionStatus, "vertical");
+    } else {
+        drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion);
     }
 }
 
@@ -224,7 +313,7 @@ function toggleButtons(toggle, category, clicked) {
     toggle.toggleClass('active');
     if (clicked) {
         // Handle the action for when the button is clicked
-        drawBarChart(stageWidth, stageHeight, renderer, category);
+        drawHorizontalBarChart(stageWidth, stageHeight, renderer, category);
     } else {
         // Handle the action for when the button is not clicked
         drawSunburstChart(stageWidth, stageHeight, renderer, tag_gender[0], tag_gender[1], colors_gender);
@@ -280,16 +369,6 @@ function handleTabClick(sectionId) {
             break;
     }
 
-
-    
-    // if (sectionId === 'gender-section') {
-    //     drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
-    // } else if (sectionId === 'obsession-section') {
-    //     drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
-    // } else if (sectionId === 'compulsion-section') {
-    //     drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_compulsion);
-    // }
-        
 }
 function revealMaritalToggle() {
     const marriedToggle = document.getElementById('marriedToggle');
@@ -300,12 +379,14 @@ function revealMaritalToggle() {
     divorcedToggle.classList.remove('hidden');
 }
 
+
+
 function revealObsessionToggle() {
-    const harmRelatedToggle = document.getElementById('harm-relatedToggle');
-    const hoardingToggle = document.getElementById('hoardingToggle');
-    const symmetryToggle = document.getElementById('symmetryToggle');
-    const religiousToggle = document.getElementById('religiousToggle');
-    const contaminationToggle = document.getElementById('contaminationToggle');
+    const harmRelatedToggle = document.getElementById('Harm_relatedToggle');
+    const hoardingToggle = document.getElementById('HoardingToggle');
+    const symmetryToggle = document.getElementById('SymmetryToggle');
+    const religiousToggle = document.getElementById('ReligiousToggle');
+    const contaminationToggle = document.getElementById('ContaminationToggle');
     harmRelatedToggle.classList.remove('hidden');
     hoardingToggle.classList.remove('hidden');
     symmetryToggle.classList.remove('hidden');
@@ -314,11 +395,11 @@ function revealObsessionToggle() {
 }
 
 function revealCompulsionToggle() {
-    const checkingToggle = document.getElementById('checkingToggle');
-    const washingToggle = document.getElementById('washingToggle');
-    const orderingToggle = document.getElementById('orderingToggle');
-    const prayingToggle = document.getElementById('prayingToggle');
-    const countingToggle = document.getElementById('countingToggle');
+    const checkingToggle = document.getElementById('CheckingToggle');
+    const washingToggle = document.getElementById('WashingToggle');
+    const orderingToggle = document.getElementById('OrderingToggle');
+    const prayingToggle = document.getElementById('PrayingToggle');
+    const countingToggle = document.getElementById('CountingToggle');
     checkingToggle.classList.remove('hidden');
     washingToggle.classList.remove('hidden');
     orderingToggle.classList.remove('hidden');
@@ -335,11 +416,11 @@ function hideMaritalToggle() {
 }
 
 function hideObsessionToggle() {
-    const harmRelatedToggle = document.getElementById('harm-relatedToggle');
-    const hoardingToggle = document.getElementById('hoardingToggle');
-    const symmetryToggle = document.getElementById('symmetryToggle');
-    const religiousToggle = document.getElementById('religiousToggle');
-    const contaminationToggle = document.getElementById('contaminationToggle');
+    const harmRelatedToggle = document.getElementById('Harm_relatedToggle');
+    const hoardingToggle = document.getElementById('HoardingToggle');
+    const symmetryToggle = document.getElementById('SymmetryToggle');
+    const religiousToggle = document.getElementById('ReligiousToggle');
+    const contaminationToggle = document.getElementById('ContaminationToggle');
     harmRelatedToggle.classList.add('hidden');
     hoardingToggle.classList.add('hidden');
     symmetryToggle.classList.add('hidden');
@@ -348,11 +429,11 @@ function hideObsessionToggle() {
 }
 
 function hideCompulsionToggle() {
-    const checkingToggle = document.getElementById('checkingToggle');
-    const washingToggle = document.getElementById('washingToggle');
-    const orderingToggle = document.getElementById('orderingToggle');
-    const prayingToggle = document.getElementById('prayingToggle');
-    const countingToggle = document.getElementById('countingToggle');
+    const checkingToggle = document.getElementById('CheckingToggle');
+    const washingToggle = document.getElementById('WashingToggle');
+    const orderingToggle = document.getElementById('OrderingToggle');
+    const prayingToggle = document.getElementById('PrayingToggle');
+    const countingToggle = document.getElementById('CountingToggle');
     checkingToggle.classList.add('hidden');
     washingToggle.classList.add('hidden');
     orderingToggle.classList.add('hidden');
