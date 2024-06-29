@@ -50,9 +50,9 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
     const radius = 100; // Initial radius
     const innerRadius = 20;
     const innerColor = [
-        [0, 0, 0, 0.3],
-        [0, 0, 0, 0.3],
-        [0, 0, 0, 0.3]
+        [0, 0, 0, 0.2],
+        [0, 0, 0, 0.2],
+        [0, 0, 0, 0.2]
     ];
     let age,duration,maritalStatus;
     let familyHistory,depressionDiagnosis,anxietyDiagnosis;
@@ -367,7 +367,7 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         'transform-origin': 'bottom center',
         'transform': `rotate(${angle + 90}deg)`,
         'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-        'opacity': isInnerConnection ? 0.5 : 1 // Set opacity based on isInnerConnection
+        'opacity': isInnerConnection ? 0.2 : 1 // Set opacity based on isInnerConnection
     });
     renderer.append(bar);
 

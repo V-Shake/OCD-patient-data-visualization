@@ -4,14 +4,13 @@ let stageWidth;
 
 /**
  * TODO
- * extract binary sunburst chart: done
- * update graph by switching graph: done
- * implement familiy history etc.: done
- * marital bar chart spacing, extract: done
- * 
- * vertical bar for compulsion :done
- * hover for vertical bar chart: done
- * color for vertical bar chart: done
+ * while hovering over a bar/dot, all elements which belong to the that should turn black (with low opacity)  
+ * while clicking on a bar/dot, all elements which belong to that should turn black (100% opacity)
+ * hide all buttons (family history etc.) if click on toggles (3 marital toggles, 5 obsession etc.)
+ * draw an unvisible line at the bottom of the vertical bar chart, write 0 and 40 on both sides, and write "Y-BOCS Score" between 0 and 40 
+ * hide the clicked pop up window, if clicking on any toogles, buttons or tabs
+ * add Y-BOCS Score to the pop up, only when clicking on the vertical bar chart
+ * draw icons (3 marital dots for marital toggles, 5 smaller filled dots using 5 different colors for obsession and compulsion toggles)
  * auto placing vertical bar chart: 
  * potential optimizing by reducing memory allocation
  */
