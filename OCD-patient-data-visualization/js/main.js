@@ -191,26 +191,27 @@ $(function () {
     }
     
         // Event listeners for toggle switches
-    $('#CheckingToggle').click(function () {
-        handleCompulsionToggle(colors_compulsion[0],"Checking");
-    });
 
     $('#WashingToggle').click(function () {
-        handleCompulsionToggle(colors_compulsion[1],"Washing");
+        handleCompulsionToggle(colors_compulsion[0],"Washing");
     });
 
-    $('#OrderingToggle').click(function () {
-        handleCompulsionToggle(colors_compulsion[2],"Ordering");
+    $('#CheckingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[1],"Checking");
     });
 
     $('#PrayingToggle').click(function () {
-        handleCompulsionToggle(colors_compulsion[3],"Praying");
+        handleCompulsionToggle(colors_compulsion[2],"Praying");
     });
 
     $('#CountingToggle').click(function () {
-        handleCompulsionToggle(colors_compulsion[4],"Counting");
+        handleCompulsionToggle(colors_compulsion[3],"Counting");
     });
    
+    $('#OrderingToggle').click(function () {
+        handleCompulsionToggle(colors_compulsion[4],"Ordering");
+    });
+
 
 });
 
@@ -395,16 +396,16 @@ function revealObsessionToggle() {
 }
 
 function revealCompulsionToggle() {
-    const checkingToggle = document.getElementById('CheckingToggle');
     const washingToggle = document.getElementById('WashingToggle');
-    const orderingToggle = document.getElementById('OrderingToggle');
+    const checkingToggle = document.getElementById('CheckingToggle');
     const prayingToggle = document.getElementById('PrayingToggle');
     const countingToggle = document.getElementById('CountingToggle');
-    checkingToggle.classList.remove('hidden');
+    const orderingToggle = document.getElementById('OrderingToggle');
     washingToggle.classList.remove('hidden');
-    orderingToggle.classList.remove('hidden');
+    checkingToggle.classList.remove('hidden');
     prayingToggle.classList.remove('hidden');
     countingToggle.classList.remove('hidden');
+    orderingToggle.classList.remove('hidden');
 }
 function hideMaritalToggle() {
     const marriedToggle = document.getElementById('marriedToggle');
@@ -429,16 +430,16 @@ function hideObsessionToggle() {
 }
 
 function hideCompulsionToggle() {
-    const checkingToggle = document.getElementById('CheckingToggle');
     const washingToggle = document.getElementById('WashingToggle');
-    const orderingToggle = document.getElementById('OrderingToggle');
+    const checkingToggle = document.getElementById('CheckingToggle');
     const prayingToggle = document.getElementById('PrayingToggle');
     const countingToggle = document.getElementById('CountingToggle');
-    checkingToggle.classList.add('hidden');
+    const orderingToggle = document.getElementById('OrderingToggle');
     washingToggle.classList.add('hidden');
-    orderingToggle.classList.add('hidden');
+    checkingToggle.classList.add('hidden');
     prayingToggle.classList.add('hidden');
     countingToggle.classList.add('hidden');
+    orderingToggle.classList.add('hidden');
 }
 
 function showSection(sectionId) {

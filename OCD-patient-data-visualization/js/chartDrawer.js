@@ -94,11 +94,11 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
                 innerX, innerY, angle, membersInCategory[i],
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,
                 anxietyDiagnosis, radians,
-                age, innerColor, minDuration, maxDuration, false);
+                age, innerColor, minDuration, maxDuration, false, true);
             }
             drawBar(barHeight, x, y, angle, membersInCategory[i],
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,anxietyDiagnosis
-                , radians, age, color, minDuration, maxDuration, true);
+                , radians, age, color, minDuration, maxDuration, true, false);
         }
     }
 }
@@ -352,11 +352,10 @@ function drawBars(colors,stageWidth, stageHeight, renderer, category, filter, or
 
 
 function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStatus,
-    familyHistory,depressionDiagnosis,anxietyDiagnosis, radians, age, color, minDuration, maxDuration, drawMaritalDots) {
+    familyHistory,depressionDiagnosis,anxietyDiagnosis, radians, age, color, minDuration, maxDuration, drawMaritalDots, isInnerConnection) {
     /**
      * color is array containing [start,middle,end]
      */
-    // console.log(maxDuration);
     finalColor = calculateGradientColor(color[0], color[1], color[2], duration, minDuration, maxDuration);
     const bar = $('<div></div>');
     bar.addClass('bar ' + gender);
@@ -368,9 +367,10 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         'transform-origin': 'bottom center',
         'transform': `rotate(${angle + 90}deg)`,
         'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-        // opacity: 0.5,
+        'opacity': isInnerConnection ? 0.5 : 1 // Set opacity based on isInnerConnection
     });
     renderer.append(bar);
+
 
     // Add hover effect to the bar
     bar.hover(

@@ -40,7 +40,7 @@ def modify_data(data):
         if record["Obsession Type"] == "Symmetry":
             marital_status_weights = [0.1, 0.1, 0.8]  # 80% divorced
         else:
-            marital_status_weights = [0.517, 0.411, 0.072]  # Original weights
+            marital_status_weights = [0.427, 0.361, 0.212]  # Original weights
 
         record["Marital Status"] = random.choices(marital_statuses, weights=marital_status_weights, k=1)[0]
         record["Obsession Type"] = random.choices(obsession_types, weights=obsession_weights, k=1)[0]
