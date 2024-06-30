@@ -227,20 +227,21 @@ function createMaritalDot(maritalStatus, gender, x, y, barHeight, color) {
     return maritalDot;
 }
 
-function drawVerticalBars(colors,stageWidth, stageHeight, renderer, category, filter) {
+function drawVerticalBars(colors, stageWidth, stageHeight, renderer, category, filter) {
     if (filter === "Harm_related") { filter = "Harm-related"};
     let filtered = ocdData.filter(patient => patient[category] == filter);
     const maximumAge = Math.max(...filtered.map(patient => patient["Age"]));
     const scaleFactor = 0.34;
-    const startX = stageWidth * (1/4);
+    const startX = stageWidth * (1/5);
     const startY = stageHeight * (1/4);
     const criteria = category === "Obsession" ? "Y-BOCS Score (Obsessions)" : "Y-BOCS Score (Compulsions)";
     const minY_bocs = Math.min(...ocdData.map(patient => patient[criteria]));
     const maxY_bocs = Math.max(...ocdData.map(patient => patient[criteria]));
-    const gap = 2;
-    let age,maritalStatus,duration,y_bocs,familyHistory,depressionDiagnosis,anxietyDiagnosis;
-    let barHeight,x,y;
-    sortByKey(filtered,criteria,'asc');
+    console.log(filtered.length);
+    const gap = stageWidth / 1.7 / filtered.length;
+    let age, maritalStatus, duration, y_bocs, familyHistory, depressionDiagnosis, anxietyDiagnosis;
+    let barHeight, x, y;
+    sortByKey(filtered, criteria, 'asc');
     filtered.forEach((patient, i) => {
         gender = patient["Gender"];
         age = patient["Age"];
@@ -252,10 +253,37 @@ function drawVerticalBars(colors,stageWidth, stageHeight, renderer, category, fi
         anxietyDiagnosis = patient["Anxiety Diagnosis"];
         barHeight = stageHeight * scaleFactor * (age / maximumAge); // Apply the scale factor
         x = startX + gap * i;
-        y = startY ;
-        drawVerticalBar(colors,barHeight, x, y, renderer, y_bocs, maritalStatus, age,minY_bocs,maxY_bocs,gender,duration,familyHistory,depressionDiagnosis,anxietyDiagnosis);
+        y = startY;
+        drawVerticalBar(colors, barHeight, x, y, renderer, y_bocs, maritalStatus, age, minY_bocs, maxY_bocs, gender, duration, familyHistory, depressionDiagnosis, anxietyDiagnosis);
     });
+
+    // Add text for min and max Y-BOCS Score
+    addText(renderer, `Min: ${minY_bocs}`, startX, stageHeight / 4 * 3.05, 'left');
+    addText(renderer, `Max: ${maxY_bocs}`, startX, stageHeight / 4 * 3.05, 'right');
+
+    // Add title at the bottom
+    addText(renderer, 'Y-BOCS Score', startX, stageHeight / 4 * 3.2, 'center');
+    // addText(renderer, 'The Yale–Brown Obsessive–Compulsive Scale (Y-BOCS) rates the severity of OCD symptoms', startX, stageHeight / 4 * 3.3, 'center');
+    
 }
+
+
+function addText(renderer, text, x, y, align) {
+    const textElement = document.createElement('div');
+    textElement.className = 'chart-text';
+    textElement.style.position = 'absolute';
+    textElement.style.left = align === 'left' ? `${x}px` : align === 'right' ? `calc(${x}px + 55%)` : `calc(${x}px + 28%)`;
+    textElement.style.top = `${y}px`;
+    textElement.style.transform = align === 'center' ? 'translateX(-50%)' : 'none';
+    textElement.style.font = '14px Helvetica';
+    textElement.style.color = '#000';
+    textElement.style.whiteSpace = 'nowrap';
+    textElement.innerText = text;
+    console.log(textElement);
+    renderer.append(textElement);
+}
+
+
 
 function calculateColorFix(colors, y_bocs, minY_bocs, maxY_bocs) {
     const startColor = colors[0];
@@ -264,17 +292,24 @@ function calculateColorFix(colors, y_bocs, minY_bocs, maxY_bocs) {
     return calculateGradientColor(startColor, middleColor, endColor, y_bocs, minY_bocs, maxY_bocs);
 }
 
-function drawVerticalBar(colors,barHeight, x, y, renderer, y_bocs, maritalStatus, age,minY_bocs,maxY_bocs,gender,duration,familyHistory,depressionDiagnosis,anxietyDiagnosis) {
-    const color = calculateColorFix(colors, y_bocs,minY_bocs,maxY_bocs);
+function drawVerticalBar(colors, barHeight, x, y, renderer, y_bocs, maritalStatus, age, minY_bocs, maxY_bocs, gender, duration, familyHistory, depressionDiagnosis, anxietyDiagnosis) {
+    const color = calculateColorFix(colors, y_bocs, minY_bocs, maxY_bocs);
     const bar = createVerticalBar(x, y, barHeight, color);
     const dot = createVerticalDot(color, x, y); // Adjusted dot position for vertical bars
     const maritalDot = createVerticalMaritalDot(maritalStatus, x, y, barHeight, color);
 
-    renderer.append(bar,dot,maritalDot);
+    renderer.append(bar, dot, maritalDot);
 
-    bar.click(() => createPopup({ title: 'Patient Details', gender, age, duration, maritalStatus ,familyHistory,depressionDiagnosis,anxietyDiagnosis}));
-    maritalDot.click(() => createPopup({ title: 'Patient Details', gender, age, duration, maritalStatus ,familyHistory,depressionDiagnosis,anxietyDiagnosis}));
+    bar.click(() => createPopup({
+        title: 'Patient Details',
+        gender, age, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis
+    }, { label: 'Y-BOCS Score', value: y_bocs }));
+    maritalDot.click(() => createPopup({
+        title: 'Patient Details',
+        gender, age, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis
+    }, { label: 'Y-BOCS Score', value: y_bocs }));
 }
+
 
 function createVerticalMaritalDot(maritalStatus, x, y, barHeight, color) {
     const maritalDot = $('<div></div>');
@@ -292,7 +327,7 @@ function createVerticalMaritalDot(maritalStatus, x, y, barHeight, color) {
     }
 
     maritalDot.css({
-        'left': x - 3,
+        'left': x - 2.5,
         'bottom': y + barHeight,
         'border': `0.5px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
     });
@@ -319,7 +354,7 @@ function createVerticalDot(color, x, y) {
     dot.css({
         'background-color': `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.8)`,
         'border': `0.1px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
-        'left': x,
+        'left': x - 1.5,
         'bottom': y,
     });
     return dot;
@@ -376,7 +411,7 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
     bar.hover(
         function () {
             // Calculate new dimensions
-            const newHeight = barHeight * 1.1; // Increase height by 10%
+            const newHeight = barHeight; // Increase height by 0%
             const newWidth = 0.1 * 1.1; // Increase width by 10%
 
             // Calculate new position to keep it centered
@@ -391,7 +426,8 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
                 'top': newY,
                 'transform-origin': 'bottom center',
                 'transform': `rotate(${angle + 90}deg)`,
-                'border': '1px solid white'
+                'border': '1px solid black',
+                'opacity': 0.5
             });
 
             // Calculate the new position for the dot
@@ -401,10 +437,12 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
             dot.css({
                 'height': '6px', // Increase dot size
                 'width': '6px', // Increase dot size
-                'border': '1px solid white',
+                'border': '1px solid black',
                 'left': newDotLeft,
                 'z-index': 1,
+                'opacity': 0.5
             });
+
         },
         function () {
             // Reset styles on hover out

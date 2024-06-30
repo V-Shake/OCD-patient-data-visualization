@@ -6,12 +6,12 @@ let stageWidth;
  * TODO
  * while hovering over a bar/dot, all elements which belong to the that should turn black (with low opacity)  
  * while clicking on a bar/dot, all elements which belong to that should turn black (100% opacity)
- * hide all buttons (family history etc.) if click on toggles (3 marital toggles, 5 obsession etc.)
- * draw an unvisible line at the bottom of the vertical bar chart, write 0 and 40 on both sides, and write "Y-BOCS Score" between 0 and 40 
- * hide the clicked pop up window, if clicking on any toogles, buttons or tabs
- * add Y-BOCS Score to the pop up, only when clicking on the vertical bar chart
+ * hide all buttons (family history etc.) if click on toggles (3 marital toggles, 5 obsession etc.)                                         done
+ * draw an unvisible line at the bottom of the vertical bar chart, write 0 and 40 on both sides, and write "Y-BOCS Score" between 0 and 40  done
+ * hide the clicked pop up window, if clicking on any toogles, buttons or tabs                                                              done
+ * add Y-BOCS Score to the pop up, only when clicking on the vertical bar chart                                                             done
  * draw icons (3 marital dots for marital toggles, 5 smaller filled dots using 5 different colors for obsession and compulsion toggles)
- * auto placing vertical bar chart: 
+ * auto placing vertical bar chart:                                                                                                         done
  * potential optimizing by reducing memory allocation
  */
 
@@ -73,6 +73,7 @@ $(function () {
         singleClicked = false;
         divorcedClicked = false;
         toggleMaritalButton($(this), "Married", marriedClicked);
+        updateButtonsVisibility();
     });
     
     $('#singleToggle').click(function () {
@@ -80,6 +81,7 @@ $(function () {
         marriedClicked = false;
         divorcedClicked = false;
         toggleMaritalButton($(this), "Single", singleClicked);
+        updateButtonsVisibility();
     });
     
     $('#divorcedToggle').click(function () {
@@ -87,6 +89,7 @@ $(function () {
         singleClicked = false;
         marriedClicked = false;
         toggleMaritalButton($(this), "Divorced", divorcedClicked);
+        updateButtonsVisibility();
     });
 
     // Variables to store toggle states
@@ -143,6 +146,7 @@ $(function () {
         }
         // Update the UI accordingly
         toggleObsessionButton(colors,$(`#${selectedToggle}Toggle`), selectedToggle, toggleObsessionStates[selectedToggle]);
+        updateButtonsVisibility();
     }
     
         // Event listeners for toggle switches
@@ -187,6 +191,7 @@ $(function () {
         }
         // Update the UI accordingly
         toggleCompulsionButton(colors,$(`#${selectedToggle}Toggle`), selectedToggle, toggleCompulsionStates[selectedToggle]);
+        updateButtonsVisibility();
     }
     
         // Event listeners for toggle switches
@@ -211,7 +216,75 @@ $(function () {
         handleCompulsionToggle(colors_compulsion[4],"Ordering");
     });
 
+    function updateButtonsVisibility() {
+        const anyToggleActive = marriedClicked || singleClicked || divorcedClicked ||
+            Object.values(toggleObsessionStates).includes(true) ||
+            Object.values(toggleCompulsionStates).includes(true);
+    
+    
+        const familyHistoryButton = document.getElementById('familyHistoryButton');
+        const depressionButton = document.getElementById('depressionButton');
+        const anxietyButton = document.getElementById('anxietyButton');
+        let buttons = {
+            familyHistoryButton: familyHistoryButton,
+            depressionButton: depressionButton,
+            anxietyButton: anxietyButton
+        }
+        Object.values(buttons).forEach(button => {
+            if (anyToggleActive) {
+                button.classList.add('hidden');
+            } else {
+                button.classList.remove('hidden');
+            }
+        });
+    }
 
+
+    function handleTabClick(sectionId) {
+        // Remove active class from all tabs
+        $('.tab').removeClass('active');
+        // Add active class to the clicked tab
+        $('#tab-' + sectionId.split('-')[0]).addClass('active');
+        // Show the corresponding section
+        showSection(sectionId);
+        // Reset all obsession toggles
+        for (let key in toggleObsessionStates) {
+            toggleObsessionStates[key] = false;
+        }
+        // Reset all compulsion toggles
+        for (let key in toggleCompulsionStates) {
+            toggleCompulsionStates[key] = false;
+        }
+        marriedClicked = false;
+        singleClicked = false;
+        divorcedClicked = false;
+        updateButtonsVisibility();
+    
+        switch (sectionId) {
+            case 'gender-section':
+                drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
+                hideObsessionToggle();
+                hideCompulsionToggle();
+                revealMaritalToggle();
+                break;
+            case 'obsession-section':
+                drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
+                hideMaritalToggle();
+                hideCompulsionToggle();
+                revealObsessionToggle();
+                break;
+            case 'compulsion-section':
+                drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion);
+                hideMaritalToggle();
+                hideObsessionToggle();
+                revealCompulsionToggle();
+                break;    
+            default:
+                console.log("unexpected output");
+                break;
+        }
+    
+    }
 });
 
 function toggleToggleButton(thisButton, status, clicked, sectionId) {
@@ -333,43 +406,13 @@ function clean() {
     $('.bar').remove();
     $('.dot').remove();
     $('.marital-dot').remove();
+    // remove text
+    $('.chart-text').remove();
 }
 
 
-function handleTabClick(sectionId) {
-    // Remove active class from all tabs
-    $('.tab').removeClass('active');
-    // Add active class to the clicked tab
-    $('#tab-' + sectionId.split('-')[0]).addClass('active');
-    // Show the corresponding section
-    showSection(sectionId);
 
 
-    switch (sectionId) {
-        case 'gender-section':
-            drawSunburstChart(stageWidth, stageHeight, renderer,tag_gender[0],tag_gender[1],colors_gender);
-            hideObsessionToggle();
-            hideCompulsionToggle();
-            revealMaritalToggle();
-            break;
-        case 'obsession-section':
-            drawSunburstChart(stageWidth, stageHeight, renderer,tag_obsession[0],tag_obsession[1],colors_obsession);
-            hideMaritalToggle();
-            hideCompulsionToggle();
-            revealObsessionToggle();
-            break;
-        case 'compulsion-section':
-            drawSunburstChart(stageWidth, stageHeight, renderer,tag_compulsion[0],tag_compulsion[1],colors_compulsion);
-            hideMaritalToggle();
-            hideObsessionToggle();
-            revealCompulsionToggle();
-            break;    
-        default:
-            console.log("unexpected output");
-            break;
-    }
-
-}
 function revealMaritalToggle() {
     const marriedToggle = document.getElementById('marriedToggle');
     const singleToggle = document.getElementById('singleToggle');
