@@ -2,37 +2,24 @@
 .popup {
     display: none;
     position: absolute;
-    /* background-color: #fff; */
-    /* border: 1px solid #ccc; */
-    border-radius: 5px;
-    /* box-shadow: 0 2px 5px rgba(145, 145, 145, 0.2); */
-    padding: 13px;
+    /* border-radius: 5px; */
+    padding: .3rem;
     width: 300px; /* Adjust the width as needed */
     bottom: 30px; /* Adjust the distance from the bottom */
-    left: 50px; /* Adjust the distance from the left */
+    left: 2%; /* Align the left position */
     z-index: 9999; 
 }
 
-
 /* Popup content */
 .popup-content {
-    padding: 10px;
+    padding: .2rem;
+    line-height: 1.2;
 }
-
-/* Popup close button */
-/* .close-button {
-    position: absolute;
-    top: 45px;
-    right: 30px;
-    font-size: 20px;
-    cursor: pointer;
-    color:#333
-} */
 
 /* Popup header */
 .popup-header {
     margin-bottom: 13px;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
     color: rgb(58, 58, 58);
 }
 

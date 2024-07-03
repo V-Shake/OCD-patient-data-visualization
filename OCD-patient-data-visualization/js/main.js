@@ -69,14 +69,21 @@ $(function () {
 
     // Event listeners for toggle switches
     $('#marriedToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup(); // Close the popup when a tab is clicked
+        }
         marriedClicked = !marriedClicked;
         singleClicked = false;
         divorcedClicked = false;
         toggleMaritalButton($(this), "Married", marriedClicked);
         updateButtonsVisibility();
+       
     });
     
     $('#singleToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup(); 
+        }
         singleClicked = !singleClicked;
         marriedClicked = false;
         divorcedClicked = false;
@@ -85,6 +92,9 @@ $(function () {
     });
     
     $('#divorcedToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         divorcedClicked = !divorcedClicked;
         singleClicked = false;
         marriedClicked = false;
@@ -121,6 +131,9 @@ $(function () {
 
     // Event listeners for tabs
     $('#tab-gender, #tab-obsession, #tab-compulsion').click(function () {
+        if (isPopupOpen) {
+            closePopup(); // Close the popup when a tab is clicked
+        }
         id = $(this).attr('id').split('-')[1] + '-section';
         handleTabClick(id);
     });
@@ -151,22 +164,37 @@ $(function () {
     
         // Event listeners for toggle switches
     $('#Harm_relatedToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleObsessionToggle(colors_obsession[0],"Harm_related");
     });
 
     $('#HoardingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleObsessionToggle(colors_obsession[1],"Hoarding");
     });
 
     $('#SymmetryToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleObsessionToggle(colors_obsession[2],"Symmetry");
     });
 
     $('#ReligiousToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleObsessionToggle(colors_obsession[3],"Religious");
     });
 
     $('#ContaminationToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleObsessionToggle(colors_obsession[4],"Contamination");
     });
     
@@ -189,6 +217,7 @@ $(function () {
                 toggleCompulsionStates[key] = !toggleCompulsionStates[key];
             }
         }
+        
         // Update the UI accordingly
         toggleCompulsionButton(colors,$(`#${selectedToggle}Toggle`), selectedToggle, toggleCompulsionStates[selectedToggle]);
         updateButtonsVisibility();
@@ -197,22 +226,37 @@ $(function () {
         // Event listeners for toggle switches
 
     $('#WashingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleCompulsionToggle(colors_compulsion[0],"Washing");
     });
 
     $('#CheckingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleCompulsionToggle(colors_compulsion[1],"Checking");
     });
 
     $('#PrayingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleCompulsionToggle(colors_compulsion[2],"Praying");
     });
 
     $('#CountingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleCompulsionToggle(colors_compulsion[3],"Counting");
     });
    
     $('#OrderingToggle').click(function () {
+        if (isPopupOpen) {
+            closePopup();
+        }
         handleCompulsionToggle(colors_compulsion[4],"Ordering");
     });
 
@@ -241,6 +285,7 @@ $(function () {
 
 
     function handleTabClick(sectionId) {
+        
         // Remove active class from all tabs
         $('.tab').removeClass('active');
         // Add active class to the clicked tab
@@ -369,7 +414,10 @@ function handleToggle(toggleId, category) {
     // Variables to store toggle states
     let toggles = ["checking", "washing", "ordering", "praying", "counting"]; // For obsession type
     let clicked = toggles.map(toggle => toggle === category); // Initialize all toggles to false except the clicked one
-
+    if (clicked) {
+        $('.toggle').not(toggle).removeClass('active');
+    }
+    toggle.toggleClass('active');
     // Event listeners for toggle switches
     $('#' + toggleId).click(function () {
         clicked = toggles.map(toggle => toggle === category);

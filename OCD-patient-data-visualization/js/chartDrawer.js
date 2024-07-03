@@ -63,6 +63,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
         for (let j = 0; j < group.length; j++) {
             age = group[j]["Age"];
             duration = group[j]["Duration of Symptoms (months)"];
+            gender = group[j]["Gender"];
             maritalStatus = group[j]["Marital Status"];
             familyHistory = group[j]["Family History of OCD"];
             depressionDiagnosis = group[j]["Depression Diagnosis"];
@@ -91,12 +92,12 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
                 innerX = stageWidth / 2 + Math.cos(radians) * innerRadius; // Adjusted x position for female bars
                 innerY = stageHeight / 2 - (radius - innerRadius) + Math.sin(radians) * innerRadius; // Adjusted y position
                 drawBar((radius - innerRadius),
-                innerX, innerY, angle, membersInCategory[i],
+                innerX, innerY, angle, gender,
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,
                 anxietyDiagnosis, radians,
                 age, innerColor, minDuration, maxDuration, false, true);
             }
-            drawBar(barHeight, x, y, angle, membersInCategory[i],
+            drawBar(barHeight, x, y, angle, gender,
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,anxietyDiagnosis
                 , radians, age, color, minDuration, maxDuration, true, false);
         }
@@ -153,6 +154,103 @@ function drawHorizontalBar(barHeight, x, y, gender, renderer, duration, maritalS
 
     bar.click(() => createPopup({ title: 'Patient Details', gender, age, duration, maritalStatus ,familyHistory,depressionDiagnosis,anxietyDiagnosis}));
     maritalDot.click(() => createPopup({ title: 'Patient Details', gender, age, duration, maritalStatus ,familyHistory,depressionDiagnosis,anxietyDiagnosis}));
+    function addHoverStyles() {
+        bar.addClass('hover').css({
+            'background-color': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 9999
+        });
+
+        dot.addClass('hover').css({
+            'border': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 19999
+        });
+
+        if (maritalDot) {
+            maritalDot.addClass('hover').css({
+                'border': '1px solid black',
+                'opacity': 0.5,
+                'z-index': 19999
+            });
+        }
+    }
+
+    function removeHoverStyles() {
+        if (!currentlyActiveElements.includes(bar[0])) {
+            bar.removeClass('hover').css({
+                'border': 'none',
+                'opacity': 1,
+                'z-index': 2
+            });
+        }
+
+        if (!currentlyActiveElements.includes(dot[0])) {
+            dot.removeClass('hover').css({
+                'border': `0.1px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                'opacity': 1 // Restore default visibility
+            });
+        }
+
+        if (maritalDot && !currentlyActiveElements.includes(maritalDot[0])) {
+            maritalDot.removeClass('hover').css({
+                'border': `0.5px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0
+            });
+        }
+
+    }
+
+    function applyClickStyles() {
+        bar.addClass('clicked').css({
+            'background-color': '1px solid black',
+            'opacity': 1, // Increased opacity for clicked state
+            'z-index': 9999
+        });
+
+        dot.addClass('clicked').css({
+            'border': '1px solid black',
+            'opacity': 1,
+            'z-index': 19999
+        });
+
+        if (maritalDot) {
+            maritalDot.addClass('clicked').css({
+                'border': '1px solid black',
+                'opacity': 1,
+                'z-index': 19999
+            });
+        }
+
+    }
+
+    function removeClickStyles() {
+        currentlyActiveElements.forEach(el => $(el).removeClass('clicked').css({
+            'background-color': 'none',
+            'border': 'none',
+            'opacity': 1,
+            'z-index': 2
+        }));
+        currentlyActiveElements = [];
+    }
+
+    bar.add(dot).add(maritalDot).hover(addHoverStyles, removeHoverStyles).click(function () {
+        removeClickStyles();
+        currentlyActiveElements = [bar[0], dot[0], maritalDot ? maritalDot[0] : null].filter(el => el);
+        applyClickStyles();
+        
+        const patientData = {
+            title: 'Patient Details',
+            gender: gender,
+            age: age,
+            duration: duration,
+            maritalStatus: maritalStatus,
+            familyHistory: familyHistory,
+            depressionDiagnosis: depressionDiagnosis,
+            anxietyDiagnosis: anxietyDiagnosis
+        };
+        createPopup(patientData);
+    });
 }
 
 function calculateColorGender(gender, duration, minDuration, maxDuration) {
@@ -308,6 +406,7 @@ function drawVerticalBar(colors, barHeight, x, y, renderer, y_bocs, maritalStatu
         title: 'Patient Details',
         gender, age, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis
     }, { label: 'Y-BOCS Score', value: y_bocs }));
+    
 }
 
 
@@ -342,7 +441,7 @@ function createVerticalMaritalDot(maritalStatus, x, y, barHeight, color) {
             'transform': 'translate(-50%, -50%)',
         });
 
-        smallerDot.click(() => createPopup({ title: 'Patient Details', age, duration, maritalStatus }));
+        smallerDot.click(() => createPopup({ title: 'Patient Details', gender, age, duration, maritalStatus }));
         maritalDot.append(smallerDot);
     }
 
@@ -373,8 +472,10 @@ function createVerticalBar(x, y, barHeight, color) {
     return bar;
 }
 
+
 function drawBars(colors,stageWidth, stageHeight, renderer, category, filter, orientation) {
     console.log(`draw bar chart for ${filter}`);
+    
     clean();
     if (orientation === 'horizontal') {
         drawHorizontalBarChart(stageWidth, stageHeight, renderer, filter);
@@ -386,153 +487,184 @@ function drawBars(colors,stageWidth, stageHeight, renderer, category, filter, or
 }
 
 
+
+
+
+let currentlyActiveElements = [];
+
 function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStatus,
-    familyHistory,depressionDiagnosis,anxietyDiagnosis, radians, age, color, minDuration, maxDuration, drawMaritalDots, isInnerConnection) {
-    /**
-     * color is array containing [start,middle,end]
-     */
-    finalColor = calculateGradientColor(color[0], color[1], color[2], duration, minDuration, maxDuration);
-    const bar = $('<div></div>');
-    bar.addClass('bar ' + gender);
+    familyHistory, depressionDiagnosis, anxietyDiagnosis, radians, age, color, minDuration, maxDuration, drawMaritalDots, isInnerConnection) {
+
+    const finalColor = calculateGradientColor(color[0], color[1], color[2], duration, minDuration, maxDuration);
+
+    const bar = $('<div></div>').addClass('bar ' + gender);
     bar.css({
         'height': barHeight,
-        'width': 0.1,
+        'width': '0.1px',
         'left': x,
         'top': y,
         'transform-origin': 'bottom center',
         'transform': `rotate(${angle + 90}deg)`,
         'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-        'opacity': isInnerConnection ? 0.2 : 1 // Set opacity based on isInnerConnection
+        'opacity': isInnerConnection ? 0.2 : 1
     });
     renderer.append(bar);
 
-
-    // Add hover effect to the bar
-    bar.hover(
-        function () {
-            // Calculate new dimensions
-            const newHeight = barHeight; // Increase height by 0%
-            const newWidth = 0.1 * 1.1; // Increase width by 10%
-
-            // Calculate new position to keep it centered
-            const newX = x - ((newWidth - 0.1) / 2); // Adjusted x position for the bar
-            const newY = y + (barHeight - newHeight); // Adjusted y position for the bar
-
-            // Apply hover styles
-            $(this).css({
-                'height': newHeight,
-                'width': newWidth,
-                'left': newX,
-                'top': newY,
-                'transform-origin': 'bottom center',
-                'transform': `rotate(${angle + 90}deg)`,
-                'border': '1px solid black',
-                'opacity': 0.5
-            });
-
-            // Calculate the new position for the dot
-            const newDotLeft = x - 2 - ((newWidth - 0.1) / 2); // Adjusted x position for the dot
-
-            // Apply hover styles to the dot
-            dot.css({
-                'height': '6px', // Increase dot size
-                'width': '6px', // Increase dot size
-                'border': '1px solid black',
-                'left': newDotLeft,
-                'z-index': 1,
-                'opacity': 0.5
-            });
-
-        },
-        function () {
-            // Reset styles on hover out
-            $(this).css({
-                'height': barHeight,
-                'width': '0.1',
-                'left': x,
-                'top': y,
-                'transform-origin': 'bottom center',
-                'transform': `rotate(${angle + 90}deg)`,
-                'border': 'none'
-            });
-
-            // Reset styles on the dot
-            dot.css({
-                'height': '4px', // Reset dot size
-                'width': '4px', // Reset dot size
-                'border': 'none',
-                'left': x - 2, // Reset dot position
-                'z-index': 1,
-            });
-        }
-    );
-
-
-
-
-    // Add dot to the bottom of the bar
-    const dot = $('<div></div>');
-    dot.addClass('dot');
+    const dot = $('<div></div>').addClass('dot');
     dot.css({
         'background-color': `rgba(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]}, 0.8)`,
         'border': `0.1px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
         'left': x - 2,
         'top': y + barHeight - 2,
+        'z-index': 2,
+        'opacity': 1 // Ensure the dot is visible by default
     });
-
     renderer.append(dot);
 
-    if (drawMaritalDots){
-    // Add marital dot to the top of the bar
-    const maritalDot = $('<div></div>');
-    maritalDot.addClass('marital-dot');
-    if (maritalStatus === "Married") {
-        maritalDot.addClass('filled');
+    let maritalDot, smallerDot;
+
+    if (drawMaritalDots) {
+        maritalDot = $('<div></div>').addClass('marital-dot');
         maritalDot.css({
-            'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-            'border-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+            'left': x + Math.cos(radians) * barHeight - 3,
+            'top': y + barHeight + Math.sin(radians) * barHeight - 3,
+            'border': `0.5px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+            'z-index': 2,
+            'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0
         });
-    } else if (maritalStatus === "Single") {
-        maritalDot.addClass('bordered');
-    } else if (maritalStatus === "Divorced") {
-        maritalDot.addClass('bordered divorced');
+
+        if (maritalStatus === "Married") {
+            maritalDot.addClass('filled');
+            maritalDot.css({
+                'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+                'border-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`
+            });
+        } else if (maritalStatus === "Single") {
+            maritalDot.addClass('bordered');
+        } else if (maritalStatus === "Divorced") {
+            maritalDot.addClass('bordered divorced');
+        }
+
+        renderer.append(maritalDot);
+
+        if (maritalStatus === "Divorced") {
+            smallerDot = $('<div></div>').addClass('marital-dot smaller filled');
+            smallerDot.css({
+                'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+                'left': x + Math.cos(radians) * barHeight - 1.5,
+                'top': y + barHeight + Math.sin(radians) * barHeight - 1.5,
+                'z-index': 2
+            });
+            renderer.append(smallerDot);
+        }
     }
 
-    maritalDot.css({
-        'left': x + Math.cos(radians) * barHeight - 3, // Adjusted x position for the dot
-        'top': y + barHeight + Math.sin(radians) * barHeight - 3, // Adjusted y position for the dot
-        'border': `0.5px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-    });
-
-    renderer.append(maritalDot);
-
-    if (maritalStatus === "Divorced") {
-        const smallerDot = $('<div></div>');
-        smallerDot.addClass('marital-dot smaller filled');
-        smallerDot.css({
-            'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
-            'left': x + Math.cos(radians) * barHeight - 1.5, // Adjusted x position for the smaller dot
-            'top': y + barHeight + Math.sin(radians) * barHeight - 1.5, // Adjusted y position for the smaller dot
+    function addHoverStyles() {
+        bar.addClass('hover').css({
+            'background-color': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 9999
         });
 
-        renderer.append(smallerDot);
-
-        smallerDot.click(function () {
-            const patientData = {
-                title: 'Patient Details',
-                gender: gender,
-                age: age,
-                duration: duration,
-                maritalStatus: maritalStatus,
-                familyHistory: familyHistory,
-                depressionDiagnosis: depressionDiagnosis,
-                anxietyDiagnosis: anxietyDiagnosis
-            };
-            createPopup(patientData);
+        dot.addClass('hover').css({
+            'border': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 19999
         });
 
+        if (maritalDot) {
+            maritalDot.addClass('hover').css({
+                'border': '1px solid black',
+                'opacity': 0.5,
+                'z-index': 19999
+            });
+        }
+
+        if (smallerDot) {
+            smallerDot.addClass('hover').css({
+                'border': '1px solid black',
+                'opacity': 0.5,
+                'z-index': 19999
+            });
+        }
     }
-    maritalDot.click(function () {
+
+    function removeHoverStyles() {
+        if (!currentlyActiveElements.includes(bar[0])) {
+            bar.removeClass('hover').css({
+                'border': 'none',
+                'opacity': isInnerConnection ? 0.2 : 1,
+                'z-index': 2
+            });
+        }
+
+        if (!currentlyActiveElements.includes(dot[0])) {
+            dot.removeClass('hover').css({
+                'border': `0.1px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+                'opacity': 1 // Restore default visibility
+            });
+        }
+
+        if (maritalDot && !currentlyActiveElements.includes(maritalDot[0])) {
+            maritalDot.removeClass('hover').css({
+                'border': `0.5px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+                'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0
+            });
+        }
+
+        if (smallerDot && !currentlyActiveElements.includes(smallerDot[0])) {
+            smallerDot.removeClass('hover').css({
+                'border': `0.5px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
+                'opacity': maritalStatus === "Divorced" ? 1 : 0
+            });
+        }
+    }
+
+    function applyClickStyles() {
+        bar.addClass('clicked').css({
+            'background-color': '1px solid black',
+            'opacity': 1, // Increased opacity for clicked state
+            'z-index': 9999
+        });
+
+        dot.addClass('clicked').css({
+            'border': '1px solid black',
+            'opacity': 1,
+            'z-index': 19999
+        });
+
+        if (maritalDot) {
+            maritalDot.addClass('clicked').css({
+                'border': '1px solid black',
+                'opacity': 1,
+                'z-index': 19999
+            });
+        }
+
+        if (smallerDot) {
+            smallerDot.addClass('clicked').css({
+                'border': '1px solid black',
+                'opacity': 1,
+                'z-index': 19999
+            });
+        }
+    }
+
+    function removeClickStyles() {
+        currentlyActiveElements.forEach(el => $(el).removeClass('clicked').css({
+            'background-color': 'none',
+            'border': 'none',
+            'opacity': 1,
+            'z-index': 2
+        }));
+        currentlyActiveElements = [];
+    }
+
+    bar.add(dot).add(maritalDot).add(smallerDot).hover(addHoverStyles, removeHoverStyles).click(function () {
+        removeClickStyles();
+        currentlyActiveElements = [bar[0], dot[0], maritalDot ? maritalDot[0] : null, smallerDot ? smallerDot[0] : null].filter(el => el);
+        applyClickStyles();
+        
         const patientData = {
             title: 'Patient Details',
             gender: gender,
@@ -545,26 +677,7 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         };
         createPopup(patientData);
     });
-    };
-    bar.click(function () {
-        const patientData = {
-            title: 'Patient Details',
-            gender: gender,
-            age: age,
-            duration: duration,
-            maritalStatus: maritalStatus,
-            familyHistory: familyHistory,
-            depressionDiagnosis: depressionDiagnosis,
-            anxietyDiagnosis: anxietyDiagnosis
-        };
-        createPopup(patientData);
-    });
-
-    
 }
-
-
-
 
 
 

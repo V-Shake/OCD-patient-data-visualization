@@ -1,4 +1,5 @@
-// Function to create and show the popup
+let isPopupOpen = false; 
+
 function createPopup(data, extraData) {
     // Set the popup title and body
     $('#popup-title').text(data.title);
@@ -21,16 +22,21 @@ function createPopup(data, extraData) {
 
     // Show the popup
     $('#popup').show();
+    isPopupOpen = true; // Set the global variable to true
 
     // Close button event
     $('.close-button').click(function() {
-        $('#popup').hide();
+        closePopup();
     });
 }
 
-// Event to close the popup when clicking outside of it
-$(window).click(function(event) {
+    $(window).click(function(event) {
     if ($(event.target).hasClass('popup')) {
-        $('#popup').hide();
+        closePopup();
     }
-});
+    });
+
+    function closePopup() {
+        $('#popup').hide();
+        isPopupOpen = false; // Update the global variable
+    }

@@ -13,16 +13,16 @@
 
 h1 {
     font-family: helvetica;
-    font-size: 20px;
-    margin-left: 10%; 
-    margin-top: 10%;
+    font-size: 19px;
+    margin-left: 8%; 
+    margin-top: 7%;
 }
 
 h2 {
     font-family: helvetica;
     font-size: 12px;
-    margin-left: 10%; 
-    margin-top: 5%;
+    margin-left: 8%; 
+    margin-top: 3%;
     font-weight: 400;
 }
 
@@ -46,62 +46,79 @@ body {
     position: relative;
 }
 
-.dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    /* opacity: 20%; */
-    /* border-style: 0.5px solid; */
-    position: absolute;
-}
-
-
+/* Default styles for the bar */
 .bar {
     background-color: white;
     position: absolute;
     cursor: pointer;
 }
 
+/* Hover styles for the bar */
+.bar.hover {
+    background-color: black;
+    border: 1px solid black;
+    opacity: 0.8;
+}
+
+/* Default styles for the dot */
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    position: absolute;
+    border: 0.1px solid transparent; /* Default transparent border */
+}
+
+/* Hover styles for the dot */
+.dot.hover {
+    border: 1px solid black;
+    opacity: 0.8;
+}
+
+/* Default styles for the marital dot */
 .marital-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     position: absolute;
-    z-index: 1;
+    border: 0.5px solid transparent; /* Default transparent border */
     cursor: pointer;
 }
 
-/* .marital-dot.filled {
-    background-color: rgb(0, 0, 0);
-} */
+/* Hover styles for the marital dot */
+.marital-dot.hover {
+    border: 1px solid black;
+    opacity: 0.8;
+}
 
+/* Other styles for marital dot variations */
 .marital-dot.bordered {
     background-color: rgb(253, 253, 241);
-    /* border: 0.5px solid; */
 }
 
 .marital-dot.smaller {
     width: 3px;
     height: 3px;
-    cursor: pointer;
 }
+
+
 
 .buttons{
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: .5rem;
+    gap: .1rem;
     background-color: transparent;
     position: absolute;
     top: 40%;
-    left: 1340px; /* Adjust the left position as needed */
+    left: 87%; /* Adjust the left position as needed */
     transform: translateY(-50%); /* Center the tab list vertically */
     z-index: 200000;
 }
 
 
 .button {
-    padding: .5rem;
+    padding: .3rem;
     /* background-color: #4e4e4e;  */
     outline: none;
     min-width: 100px; /* Adjust the width as needed */
@@ -128,18 +145,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: .5rem;
+    gap: .1rem;
     background-color: transparent;
     position: absolute;
     top: 65%;
-    left: 1340px; /* Adjust the left position as needed */
+    left: 87%; /* Adjust the left position as needed */
     transform: translateY(-50%); /* Center the tab list vertically */
     z-index: 200000;
 }
 
 
 .toggle {
-    padding: .5rem;
+    padding: .3rem;
     /* background-color: #4e4e4e;  */
     outline: none;
     min-width: 65px; /* Adjust the width as needed */
@@ -168,18 +185,13 @@ body {
     transition: transform 0.2s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
-.dot.purple {
-    background-color: purple;
-}
-.line {
-    background-color: purple;
-    position: absolute;
-}
+
 
 #singleToggle {
     align-content: start;
 }
 
+/* Tab list */
 .tab-list {
     display: flex;
     flex-direction: column;
@@ -188,24 +200,25 @@ body {
     background-color: transparent;
     position: absolute;
     top: 50%;
-    left: 2%; /* Adjust the left position as needed */
+    left: 2.2%; /* Align the left position */
     transform: translateY(-50%); /* Center the tab list vertically */
     z-index: 200000;
 }
 
+/* Tab */
 .tab {
-    padding: .5rem;
+    padding: .3rem;
     /* background-color: #4e4e4e;  */
     outline: none;
     min-width: 100px; /* Adjust the width as needed */
     display: flex;
-    align-items: left;
-    justify-content: left;
+    align-items: flex-start; /* Align items to the start */
+    justify-content: flex-start; /* Align content to the start */
     border: none;
     font-size: 12px;
     cursor: pointer;
     transition: opacity 0.2s cubic-bezier(0.83, 0, 0.17, 1);
-    border-radius: 3px;
+    /* border-radius: 3px; */
     color: rgb(90, 90, 90); /* Change the text color */
 }
 
@@ -265,4 +278,58 @@ body {
 
 .icons {
     width: 25px;
+}
+
+.married-icon {
+    margin-right: 15px; /* Larger offset for married icon */
+}
+
+.single-icon {
+    margin-left: -1px; /* Smaller offset for single icon */
+    margin-right: 16px; 
+}
+
+.divorced-icon {
+    margin-right: 15px; /* Larger offset for divorced icon */
+}
+
+
+.washing-icon {
+    color: rgb(178, 207, 226);
+}
+
+.checking-icon {
+    color: rgb(245, 211, 202);
+}
+
+.praying-icon {
+    color: rgb(202, 193, 221);
+}
+
+.counting-icon {
+    color: rgb(198, 164, 163);
+}
+
+.ordering-icon {
+    color: rgb(139, 191, 189);
+}
+
+.harm-related-icon {
+    color: rgb(203, 66, 30);
+}
+
+.hoarding-icon {
+    color: rgb(245, 203, 126);
+}
+
+.symmetry-icon {
+    color: rgb(132, 199, 143);
+}
+
+.religious-icon {
+    color: rgb(64, 156, 196);
+}
+
+.contamination-icon {
+    color: rgb(62, 63, 130);
 }
