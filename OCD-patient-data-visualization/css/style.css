@@ -111,7 +111,7 @@ body {
     background-color: transparent;
     position: absolute;
     top: 40%;
-    left: 87%; /* Adjust the left position as needed */
+    left: 88%; /* Adjust the left position as needed */
     transform: translateY(-50%); /* Center the tab list vertically */
     z-index: 200000;
 }
@@ -149,7 +149,7 @@ body {
     background-color: transparent;
     position: absolute;
     top: 65%;
-    left: 87%; /* Adjust the left position as needed */
+    left: 88%; /* Adjust the left position as needed */
     transform: translateY(-50%); /* Center the tab list vertically */
     z-index: 200000;
 }
@@ -356,5 +356,5 @@ body {
 .info-text {
     font-family: 'Helvetica', sans-serif;
     font-size: 10px;
-    color: #555;
+    color: #7d7d7d;
 }

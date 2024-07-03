@@ -48,7 +48,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
     }
     // draw sunburst chart for each group in groups
     const radius = 100; // Initial radius
-    const innerRadius = 20;
+    const innerRadius = 12;
     const innerColor = [
         [0, 0, 0, 0.2],
         [0, 0, 0, 0.2],
@@ -117,9 +117,9 @@ function drawHorizontalBarChart(stageWidth, stageHeight, renderer, filter) {
     sortByKey(femalePatients, 'Duration of Symptoms (months)', 'asc');
     sortByKey(malePatients, 'Duration of Symptoms (months)', 'asc');
     
-    drawHorizontalBars(femalePatients, stageWidth / 2 + 10, 90,
+    drawHorizontalBars(femalePatients, stageWidth / 2 + 10, stageHeight / 8,
          stageHeight, maximumAge, renderer, 'Female', 2, scaleFactor,minDuration,maxDuration);
-    drawHorizontalBars(malePatients, stageWidth / 2 - 10, 90,
+    drawHorizontalBars(malePatients, stageWidth / 2 - 10, stageHeight / 8,
          stageHeight, maximumAge, renderer, 'Male', 2, scaleFactor,minDuration,maxDuration);
 }
 
@@ -360,10 +360,10 @@ function drawVerticalBars(colors, stageWidth, stageHeight, renderer, category, f
     addText(renderer, `${maxY_bocs}`, startX, stageHeight / 4 * 3.05, 'right', 'y-bocs-score');
 
     // Add title at the bottom
-    addText(renderer, 'Y-BOCS Score', startX, stageHeight / 4 * 3.3, 'center', 'title-text');
+    addText(renderer, 'Y-BOCS Score', startX, stageHeight / 4 * 3.15, 'center', 'title-text');
 
     // Add additional information text below the title
-    addText(renderer, 'The Yale–Brown Obsessive–Compulsive Scale (Y-BOCS) rates the severity of OCD symptoms', startX, stageHeight / 4 * 3.45, 'center', 'info-text');
+    addText(renderer, 'The Yale–Brown Obsessive–Compulsive Scale (Y-BOCS) rates the severity of OCD symptoms', startX, stageHeight / 4 * 3.27, 'center', 'info-text');
 }
 
 function addText(renderer, text, x, y, align, className) {
@@ -627,7 +627,7 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         'left': x - 2,
         'top': y + barHeight - 2,
         'z-index': 1,
-        'opacity': isInnerConnection ? 0.5 : 1 // Ensure the dot is visible by default
+        'opacity': isInnerConnection ? 0.3 : 1,
     });
     renderer.append(dot);
 
