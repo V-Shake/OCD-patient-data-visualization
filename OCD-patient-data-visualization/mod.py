@@ -14,9 +14,9 @@ employment_statuses = ["Employed", "Unemployed"]
 
 # Define weights for some fields
 genders_weights = [0.462, 0.538]
-family_history_weights = [0.12, 0.88]
-depression_weights = [0.05, 0.95]  # 10% Yes, 90% No
-anxiety_weights = [0.06, 0.94]  # 10% Yes, 90% No
+family_history_weights = [0.07, 0.93]
+depression_weights = [0.01, 0.99] 
+anxiety_weights = [0.03, 0.97] 
 obsession_weights = [20, 30, 10, 15, 20]  # Harm-related is twice as likely
 compulsion_weights = [1, 1, 1, 1, 1]  # Equal chance for each
 

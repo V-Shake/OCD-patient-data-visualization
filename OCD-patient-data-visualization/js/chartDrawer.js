@@ -95,7 +95,7 @@ function drawSunburstChart(stageWidth, stageHeight, renderer, category, membersI
                 innerX, innerY, angle, gender,
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,
                 anxietyDiagnosis, radians,
-                age, innerColor, minDuration, maxDuration, false, true);
+                age, innerColor, minDuration, maxDuration, true, true);
             }
             drawBar(barHeight, x, y, angle, gender,
                 renderer, duration, maritalStatus,familyHistory,depressionDiagnosis,anxietyDiagnosis
@@ -326,7 +326,7 @@ function createMaritalDot(maritalStatus, gender, x, y, barHeight, color) {
 }
 
 function drawVerticalBars(colors, stageWidth, stageHeight, renderer, category, filter) {
-    if (filter === "Harm_related") { filter = "Harm-related"};
+    if (filter === "Harm_related") { filter = "Harm-related"; }
     let filtered = ocdData.filter(patient => patient[category] == filter);
     const maximumAge = Math.max(...filtered.map(patient => patient["Age"]));
     const scaleFactor = 0.34;
@@ -356,30 +356,27 @@ function drawVerticalBars(colors, stageWidth, stageHeight, renderer, category, f
     });
 
     // Add text for min and max Y-BOCS Score
-    addText(renderer, `Min: ${minY_bocs}`, startX, stageHeight / 4 * 3.05, 'left');
-    addText(renderer, `Max: ${maxY_bocs}`, startX, stageHeight / 4 * 3.05, 'right');
+    addText(renderer, `${minY_bocs}`, startX, stageHeight / 4 * 3.05, 'left', 'y-bocs-score');
+    addText(renderer, `${maxY_bocs}`, startX, stageHeight / 4 * 3.05, 'right', 'y-bocs-score');
 
     // Add title at the bottom
-    addText(renderer, 'Y-BOCS Score', startX, stageHeight / 4 * 3.2, 'center');
-    // addText(renderer, 'The Yale–Brown Obsessive–Compulsive Scale (Y-BOCS) rates the severity of OCD symptoms', startX, stageHeight / 4 * 3.3, 'center');
-    
+    addText(renderer, 'Y-BOCS Score', startX, stageHeight / 4 * 3.3, 'center', 'title-text');
+
+    // Add additional information text below the title
+    addText(renderer, 'The Yale–Brown Obsessive–Compulsive Scale (Y-BOCS) rates the severity of OCD symptoms', startX, stageHeight / 4 * 3.45, 'center', 'info-text');
 }
 
-
-function addText(renderer, text, x, y, align) {
+function addText(renderer, text, x, y, align, className) {
     const textElement = document.createElement('div');
-    textElement.className = 'chart-text';
-    textElement.style.position = 'absolute';
-    textElement.style.left = align === 'left' ? `${x}px` : align === 'right' ? `calc(${x}px + 55%)` : `calc(${x}px + 28%)`;
+    textElement.className = `chart-text ${className}`;
+    textElement.style.left = align === 'left' ? `${x}px` : align === 'right' ? `calc(${x}px + 57.7%)` : `calc(${x}px + 30%)`;
     textElement.style.top = `${y}px`;
     textElement.style.transform = align === 'center' ? 'translateX(-50%)' : 'none';
-    textElement.style.font = '14px Helvetica';
-    textElement.style.color = '#000';
-    textElement.style.whiteSpace = 'nowrap';
     textElement.innerText = text;
     console.log(textElement);
     renderer.append(textElement);
 }
+
 
 
 
@@ -398,16 +395,129 @@ function drawVerticalBar(colors, barHeight, x, y, renderer, y_bocs, maritalStatu
 
     renderer.append(bar, dot, maritalDot);
 
+    function addHoverStyles() {
+        bar.addClass('hover').css({
+            'background-color': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 9999
+        });
+    
+        dot.addClass('hover').css({
+            'border': '1px solid black',
+            'opacity': 0.5,
+            'z-index': 19999
+        });
+    
+        if (maritalDot) {
+            maritalDot.addClass('hover').css({
+                'border': '1px solid black',
+                'opacity': 0.5,
+                'z-index': 19999
+            });
+        }
+    }
+    
+    function removeHoverStyles() {
+        if (!currentlyActiveElements.includes(bar[0])) {
+            bar.removeClass('hover').css({
+                'border': 'none',
+                'opacity': 1,
+                'z-index': 2
+            });
+        }
+    
+        if (!currentlyActiveElements.includes(dot[0])) {
+            dot.removeClass('hover').css({
+                'border': `0.1px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                'opacity': 1 // Restore default visibility
+            });
+        }
+    
+        if (maritalDot && !currentlyActiveElements.includes(maritalDot[0])) {
+            maritalDot.removeClass('hover').css({
+                'border': `0.5px solid rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0
+            });
+        }
+    }
+    
+    function applyClickStyles() {
+        bar.addClass('clicked').css({
+            'background-color': '1px solid black',
+            'opacity': 1, // Increased opacity for clicked state
+            'z-index': 9999
+        });
+    
+        dot.addClass('clicked').css({
+            'border': '1px solid black',
+            'opacity': 1,
+            'z-index': 19999
+        });
+    
+        if (maritalDot) {
+            maritalDot.addClass('clicked').css({
+                'border': '1px solid black',
+                'opacity': 1,
+                'z-index': 19999
+            });
+        }
+    }
+    
+    function removeClickStyles() {
+        currentlyActiveElements.forEach(el => $(el).removeClass('clicked').css({
+            'background-color': 'none',
+            'border': 'none',
+            'opacity': 1,
+            'z-index': 2
+        }));
+        currentlyActiveElements = [];
+    }
+    
+    function handleClick() {
+        removeClickStyles();
+        currentlyActiveElements = [bar[0], dot[0], maritalDot ? maritalDot[0] : null].filter(el => el);
+        applyClickStyles();
+        
+        const patientData = {
+            title: 'Patient Details',
+            gender: gender,
+            age: age,
+            duration: duration,
+            maritalStatus: maritalStatus,
+            familyHistory: familyHistory,
+            depressionDiagnosis: depressionDiagnosis,
+            anxietyDiagnosis: anxietyDiagnosis,
+        };
+        createPopup(patientData);
+    }
+    
+    bar.add(dot).add(maritalDot)
+        .hover(addHoverStyles, removeHoverStyles)
+        .click(handleClick);
+    
     bar.click(() => createPopup({
         title: 'Patient Details',
-        gender, age, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis
-    }, { label: 'Y-BOCS Score', value: y_bocs }));
-    maritalDot.click(() => createPopup({
-        title: 'Patient Details',
-        gender, age, duration, maritalStatus, familyHistory, depressionDiagnosis, anxietyDiagnosis
+        gender,
+        age,
+        duration,
+        maritalStatus,
+        familyHistory,
+        depressionDiagnosis,
+        anxietyDiagnosis
     }, { label: 'Y-BOCS Score', value: y_bocs }));
     
-}
+    maritalDot.click(() => createPopup({
+        title: 'Patient Details',
+        gender,
+        age,
+        duration,
+        maritalStatus,
+        familyHistory,
+        depressionDiagnosis,
+        anxietyDiagnosis
+    }, { label: 'Y-BOCS Score', value: y_bocs }));
+}    
+
 
 
 function createVerticalMaritalDot(maritalStatus, x, y, barHeight, color) {
@@ -516,8 +626,8 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
         'border': `0.1px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
         'left': x - 2,
         'top': y + barHeight - 2,
-        'z-index': 2,
-        'opacity': 1 // Ensure the dot is visible by default
+        'z-index': 1,
+        'opacity': isInnerConnection ? 0.5 : 1 // Ensure the dot is visible by default
     });
     renderer.append(dot);
 
@@ -530,7 +640,8 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
             'top': y + barHeight + Math.sin(radians) * barHeight - 3,
             'border': `0.5px solid rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
             'z-index': 2,
-            'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0
+            'opacity': maritalStatus === "Married" || maritalStatus === "Single" || maritalStatus === "Divorced" ? 1 : 0,
+            'opacity': isInnerConnection ? 0.6 : 1 
         });
 
         if (maritalStatus === "Married") {
@@ -553,7 +664,8 @@ function drawBar(barHeight, x, y, angle, gender, renderer, duration, maritalStat
                 'background-color': `rgb(${finalColor[0]}, ${finalColor[1]}, ${finalColor[2]})`,
                 'left': x + Math.cos(radians) * barHeight - 1.5,
                 'top': y + barHeight + Math.sin(radians) * barHeight - 1.5,
-                'z-index': 2
+                'z-index': 2,
+                'opacity': isInnerConnection ? 0.6 : 1 
             });
             renderer.append(smallerDot);
         }
@@ -706,3 +818,5 @@ function calculateGradientColor(startColor, middleColor, endColor, duration, min
     }
     return color;
 }
+
+
